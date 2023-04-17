@@ -1,7 +1,6 @@
 package com.cos.security1.service.Impl;
 
 import com.cos.security1.domain.Member;
-import com.cos.security1.dto.EmailDto;
 import com.cos.security1.dto.MemberDto;
 import com.cos.security1.repository.MemberRepository;
 import com.cos.security1.security.SecurityService;
@@ -44,7 +43,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Optional<Member> getUserByEmail(String email){
-        return memberRepository.findByPassword(email);
+        return memberRepository.findByEmail(email);
     }
 
     @Override
