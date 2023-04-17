@@ -37,9 +37,9 @@ public class SecurityService {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
-            throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "유효 하지 않은 토큰");
+            throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "만료된 토큰");
         } catch (JwtException e) {
-            throw new JwtException("유효하지 않은 토큰");
+            throw new JwtException("유효 하지 않은 토큰");
         }
         return claims.getSubject();
 

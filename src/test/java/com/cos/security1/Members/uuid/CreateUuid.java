@@ -1,4 +1,4 @@
-package com.cos.security1.UserRepositoryTest.UUID;
+package com.cos.security1.Members.uuid;
 
 import org.junit.jupiter.api.Test;
 
