@@ -13,9 +13,9 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @PostMapping("")
+    @PostMapping
     public UserDTO insertUser(@RequestBody UserDTO user){
-        return userService.inserUser(user);
+        return userService.insertUser(user);
     }
 
     @GetMapping("")

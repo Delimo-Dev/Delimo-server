@@ -12,7 +12,7 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public UserDTO inserUser(UserDTO user){
+    public UserDTO insertUser(UserDTO user){
         return userRepository.insertUser(user);
     }
 
