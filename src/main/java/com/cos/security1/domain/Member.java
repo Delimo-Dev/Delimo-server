@@ -20,16 +20,20 @@ public class Member {
         @Column(name = "userpw", nullable = false)
         private String password;
 
+        @Column(name = "token", nullable = false)
+        private String token;
+
         @Column(name = "usercode")
         private String code;
 
         private String resolution;
 
         @Builder
-        public Member(String email, String password, String code, String resolution) {
+        public Member(String email, String password, String code, String token, String resolution) {
                 this.email = email;
                 this.password = password;
                 this.code = code;
+                this.token = token;
                 this.resolution = resolution;
         }
 }

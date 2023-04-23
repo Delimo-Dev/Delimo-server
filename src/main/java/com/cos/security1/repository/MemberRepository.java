@@ -16,6 +16,7 @@ public interface MemberRepository {
     Optional<Member> findByEmail(String email);
     Optional<Member> findByPassword(String password);
     Optional<Member> findByCode(String code);
+    Optional<Member> findByToken(String token);
     List<Member> findAll();
     void updateResolution(Long id, String resolution);
 }

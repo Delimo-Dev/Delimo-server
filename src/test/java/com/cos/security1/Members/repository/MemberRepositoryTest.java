@@ -1,6 +1,7 @@
 package com.cos.security1.Members.repository;
 
 import com.cos.security1.domain.Member;
+import com.cos.security1.dto.AuthenticationDto;
 import com.cos.security1.repository.MemberRepository;
 import com.cos.security1.security.SecurityService;
 import com.cos.security1.service.Impl.UuidService;
@@ -22,14 +23,14 @@ public class MemberRepositoryTest {
     void new_signin(){
         Member member = Member.builder()
                 .email("lyb2325@gmail.com")
-                .password(new SecurityService().createToken("1353",20*1000*60))
+                .password("1234")
                 .code(new UuidService().getUuid())
                 .resolution("오늘도 화이팅")
                 .build();
 
         Member member2 = Member.builder()
                 .email("2l3y2b5@naver.com")
-                .password(new SecurityService().createToken("1353",20*1000*60))
+                .password("1234")
                 .code(new UuidService().getUuid())
                 .resolution("꾸준하게")
                 .build();

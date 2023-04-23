@@ -46,7 +46,7 @@ public class MemberController {
         Optional<Member> memberFind = memberService.getUserByEmail(user.getEmail());
         if(memberFind.isEmpty()){
             Member member = memberService.insertUser(user);
-            TokenDto tokenDto = new TokenDto(member.getPassword());
+            TokenDto tokenDto = new TokenDto(member.getToken());
 
             response.setCode(StatusCode.OK);
             response.setMessage(ResponseMessage.SIGNIN_SUCCESS);
@@ -88,10 +88,7 @@ public class MemberController {
 
         ResolutionResponse response = new ResolutionResponse();
 
-        System.out.println("token = " + token);
         String bearerToken = token.substring(7);
-        System.out.println("bearerToken = " + bearerToken);
-        System.out.println("resolutionDto = " + resolutionDto.getResolution());
         Optional<Member> findMember = memberService.verifyMember(bearerToken);
         if (findMember.isEmpty()){
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
