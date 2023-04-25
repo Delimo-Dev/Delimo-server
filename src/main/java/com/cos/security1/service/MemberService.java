@@ -9,7 +9,9 @@ import java.util.Optional;
 public interface MemberService {
     Member insertUser(MemberDto user);
     List<Member> getAllUsers();
+    Optional<Member> getUserById(Long id);
     Optional<Member> getUserByEmail(String email);
     void updateResolution(Long id, String resolution);
     Optional<Member> verifyMember(String token);
+    Optional<Member> getInfo(Long id);
 }

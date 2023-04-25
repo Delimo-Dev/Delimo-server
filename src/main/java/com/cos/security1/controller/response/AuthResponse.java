@@ -5,14 +5,14 @@ import com.cos.security1.controller.status.StatusCode;
 import lombok.Data;
 
 @Data
-public class ResolutionResponse {
+public class AuthResponse {
     private int code;
     private String message;
     private Object data;
 
-    public ResolutionResponse(){
+    public AuthResponse(){
         this.code = StatusCode.UNAUTHORIZED;
-        this.message = ResponseMessage.NOT_FOUND_USER;
+        this.message = ResponseMessage.UNAUTHORIZED;
         this.data = null;
     }
 

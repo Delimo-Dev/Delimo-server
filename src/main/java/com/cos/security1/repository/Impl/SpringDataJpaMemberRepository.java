@@ -12,6 +12,9 @@ import java.util.Optional;
 
 public interface SpringDataJpaMemberRepository extends JpaRepository<Member, Long>, MemberRepository {
     @Override
+    Member save(Member member);
+
+    @Override
     Optional<Member> findByEmail(String email);
 
     @Override
@@ -22,6 +25,7 @@ public interface SpringDataJpaMemberRepository extends JpaRepository<Member, Lon
 
     @Override
     Optional<Member> findByToken(String token);
+
 
     @Query("update Member m set m.resolution = :resolution where m.id = :id")
     @Modifying

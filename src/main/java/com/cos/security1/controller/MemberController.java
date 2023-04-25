@@ -1,7 +1,7 @@
 package com.cos.security1.controller;
 
 import com.cos.security1.controller.response.EmailVerificationResponse;
-import com.cos.security1.controller.response.ResolutionResponse;
+import com.cos.security1.controller.response.AuthResponse;
 import com.cos.security1.controller.response.SigninResponse;
 import com.cos.security1.controller.status.ResponseMessage;
 import com.cos.security1.controller.status.StatusCode;
@@ -11,15 +11,13 @@ import com.cos.security1.dto.MemberDto;
 import com.cos.security1.dto.ResolutionDto;
 import com.cos.security1.dto.TokenDto;
 import com.cos.security1.service.MemberService;
-import jakarta.persistence.Access;
 import jakarta.transaction.Transactional;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.AccessDeniedException;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -75,6 +73,11 @@ public class MemberController {
         return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
     }
 
+    Optional<Member> findMember(String token){
+        String bearerToken = token.substring(7);
+        return memberService.verifyMember(bearerToken);
+    }
+
     /**
      * 다짐 추가 및 수정
      * @param token
@@ -82,22 +85,42 @@ public class MemberController {
      * @return
      */
     @PatchMapping("/updateResolution")
-    public ResponseEntity<ResolutionResponse> updateResolution(
+    public ResponseEntity<AuthResponse> updateResolution(
             @RequestHeader("Authorization") String token,
             @RequestBody ResolutionDto resolutionDto) {
 
-        ResolutionResponse response = new ResolutionResponse();
+        AuthResponse response = new AuthResponse();
 
-        String bearerToken = token.substring(7);
-        Optional<Member> findMember = memberService.verifyMember(bearerToken);
-        if (findMember.isEmpty()){
+        Optional<Member> member = findMember(token);
+        if (member.isEmpty()){
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        memberService.updateResolution(findMember.get().getId(), resolutionDto.getResolution());
+        memberService.updateResolution(member.get().getId(), resolutionDto.getResolution());
         response.setCode(StatusCode.OK);
         response.setMessage(ResponseMessage.RESOLUTION_UPDATED);
         response.setData(resolutionDto);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * 나의 정보 가져오기 (마이 페이지)
+     * @param token
+     * @return
+     */
+    @GetMapping("/myPage")
+    public ResponseEntity<AuthResponse> getMyInfo(@RequestHeader("Authorization") String token) {
+        AuthResponse response = new AuthResponse();
+
+        Optional<Member> member = findMember(token);
+        if (member.isEmpty()) {
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
+        response.setCode(StatusCode.OK);
+        response.setMessage(ResponseMessage.MEMBER_INFO_SUCCESS);
+        response.setData(member);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

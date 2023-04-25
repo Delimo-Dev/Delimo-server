@@ -2,31 +2,29 @@ package com.cos.security1.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
-@Table(name = "MEMBERS")
+@Table(name = "MEMBER_TBL")
 @ToString
 @NoArgsConstructor
 public class Member {
         @Id  @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "member_id")
+        @Column(name = "MEMBER_ID")
         private Long id;
-
-        @Column(name = "useremail", nullable = false)
         private String email;
-
-        @Column(name = "userpw", nullable = false)
         private String password;
-
-        @Column(name = "token", nullable = false)
+        @Column(nullable = false)
         private String token;
-
-        @Column(name = "usercode")
+        @Column(name = "USERCODE")
         private String code;
-
         private String resolution;
+
+        @OneToMany(mappedBy = "member")
+        private List<FriendList> friendList;
 
         @Builder
         public Member(String email, String password, String code, String token, String resolution) {
