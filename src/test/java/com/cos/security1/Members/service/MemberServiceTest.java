@@ -16,7 +16,7 @@ public class MemberServiceTest {
     MemberService memberService;
 
     @Test
-    void email_duplication_signin(){
+    void 이메일_중복_회원가입(){
         MemberDto memberDto = new MemberDto("lyb2325@gmail.com", "1234");
         MemberDto memberDto2 = new MemberDto("lyb2325@gmail.com", "1234");
 
@@ -29,5 +29,20 @@ public class MemberServiceTest {
                     .isInstanceOf(RuntimeException.class)
                     .hasMessage("이미 사용 중인 이메일입니다.");
         }
+    }
+
+    @Test
+    void 로그인_회원인증_실패(){
+        // token 일치하는 회원 탐색 실패
+    }
+    
+    @Test
+    void 로그인_회원인증_성공(){
+        
+    }
+
+    @Test
+    void 오늘의_다짐_수정성공() {
+
     }
 }

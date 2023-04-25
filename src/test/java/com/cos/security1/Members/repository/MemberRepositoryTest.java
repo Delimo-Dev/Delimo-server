@@ -20,7 +20,7 @@ public class MemberRepositoryTest {
     MemberRepository memberRepository;
 
     @Test
-    void new_signin(){
+    void 두명의_회원_신규회원가입(){
         Member member = Member.builder()
                 .email("lyb2325@gmail.com")
                 .password("1234")

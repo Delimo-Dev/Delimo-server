@@ -74,4 +74,24 @@ public class RequestFriendTest {
 
         System.out.println(friendRequestRepository.findAllBy());
     }
+
+    @Test
+    void 중복_친구신청(){
+
+    }
+
+    @Test
+    void 친구ID_탐색실패(){
+
+    }
+
+    @Test
+    void 전송한_친구신청_확인하기(){
+
+    }
+
+    @Test
+    void 신청받은_친구신청_확인하기(){
+
+    }
 }
