@@ -8,6 +8,9 @@ public class ResponseMessage {
     public static final String RESOLUTION_UPDATED = "다짐이 수정되었습니다.";
     public static final String EMAIL_EXISTED = "이미 사용 중인 이메일입니다.";
     public static final String NOT_FOUND_USER = "회원을 찾을 수 없습니다.";
+    public static final String UNAUTHORIZED = "회원 인증 실패";
+    public static final String MEMBER_INFO_SUCCESS = "회원의 정보를 성공적으로 불러왔습니다.";
+    public static final String FRIEND_REQUESTED_SUCCESS = "친구 신청을 성공적으로 보냈습니다.";
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터 베이스 에러";
     public static final String API_CALL_ERROR = "API 호출 실패";
