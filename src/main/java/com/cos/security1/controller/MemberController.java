@@ -12,6 +12,7 @@ import com.cos.security1.dto.ResolutionDto;
 import com.cos.security1.dto.TokenDto;
 import com.cos.security1.service.MemberService;
 import jakarta.transaction.Transactional;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,9 +47,10 @@ public class MemberController {
             Member member = memberService.insertUser(user);
             TokenDto tokenDto = new TokenDto(member.getToken());
 
-            response.setCode(StatusCode.OK);
-            response.setMessage(ResponseMessage.SIGNIN_SUCCESS);
-            response.setData(tokenDto);
+            response.builder()
+                        .code(StatusCode.OK)
+                        .message(ResponseMessage.SIGNIN_SUCCESS)
+                        .data(tokenDto);
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
@@ -66,8 +68,10 @@ public class MemberController {
 
         Optional<Member> memberFind = memberService.getUserByEmail(emailDto.getEmail());
         if (memberFind.isEmpty()){
-            response.setCode(StatusCode.OK);
-            response.setMessage(ResponseMessage.EMAIL_OK);
+
+            response.builder()
+                    .code(StatusCode.OK)
+                    .message(ResponseMessage.EMAIL_OK);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
@@ -97,9 +101,11 @@ public class MemberController {
         }
 
         memberService.updateResolution(member.get().getId(), resolutionDto.getResolution());
-        response.setCode(StatusCode.OK);
-        response.setMessage(ResponseMessage.RESOLUTION_UPDATED);
-        response.setData(resolutionDto);
+
+        response.builder()
+                .code(StatusCode.OK)
+                .message(ResponseMessage.RESOLUTION_UPDATED)
+                .data(resolutionDto);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -118,9 +124,10 @@ public class MemberController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        response.setCode(StatusCode.OK);
-        response.setMessage(ResponseMessage.MEMBER_INFO_SUCCESS);
-        response.setData(member);
+        response.builder()
+                .code(StatusCode.OK)
+                .message(ResponseMessage.MEMBER_INFO_SUCCESS)
+                .data(member);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

@@ -47,8 +47,9 @@ public class FriendController {
         // 인증 실패
         Optional<Member> memberFind = findMember(token);
         if(memberFind.isEmpty()){
-            response.setCode(StatusCode.UNAUTHORIZED);
-            response.setMessage(ResponseMessage.UNAUTHORIZED);
+            response.builder()
+                    .code(StatusCode.UNAUTHORIZED)
+                    .message(ResponseMessage.UNAUTHORIZED);
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
 
@@ -60,8 +61,10 @@ public class FriendController {
 
         friendRequestService.requestFriend(memberFind.get(), friend.get());
 
-        response.setCode(StatusCode.CREATED);
-        response.setMessage(ResponseMessage.FRIEND_REQUESTED_SUCCESS);
+        response.builder()
+                .code(StatusCode.CREATED)
+                .message(ResponseMessage.FRIEND_REQUESTED_SUCCESS);
+
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 
