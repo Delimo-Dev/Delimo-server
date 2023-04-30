@@ -12,7 +12,6 @@ import com.cos.security1.dto.ResolutionDto;
 import com.cos.security1.dto.TokenDto;
 import com.cos.security1.service.MemberService;
 import jakarta.transaction.Transactional;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,10 +46,11 @@ public class MemberController {
             Member member = memberService.insertUser(user);
             TokenDto tokenDto = new TokenDto(member.getToken());
 
-            response.builder()
-                        .code(StatusCode.OK)
-                        .message(ResponseMessage.SIGNIN_SUCCESS)
-                        .data(tokenDto);
+            response = SigninResponse.builder()
+                    .code(StatusCode.OK)
+                    .message(ResponseMessage.SIGNIN_SUCCESS)
+                    .data(tokenDto)
+                    .build();
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
@@ -69,9 +69,11 @@ public class MemberController {
         Optional<Member> memberFind = memberService.getUserByEmail(emailDto.getEmail());
         if (memberFind.isEmpty()){
 
-            response.builder()
+            response = EmailVerificationResponse.builder()
                     .code(StatusCode.OK)
-                    .message(ResponseMessage.EMAIL_OK);
+                    .message(ResponseMessage.EMAIL_OK)
+                    .build();
+
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
@@ -102,10 +104,11 @@ public class MemberController {
 
         memberService.updateResolution(member.get().getId(), resolutionDto.getResolution());
 
-        response.builder()
+        response = AuthResponse.builder()
                 .code(StatusCode.OK)
                 .message(ResponseMessage.RESOLUTION_UPDATED)
-                .data(resolutionDto);
+                .data(resolutionDto)
+                .build();
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -124,10 +127,11 @@ public class MemberController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        response.builder()
+        response = AuthResponse.builder()
                 .code(StatusCode.OK)
                 .message(ResponseMessage.MEMBER_INFO_SUCCESS)
-                .data(member);
+                .data(member)
+                .build();
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

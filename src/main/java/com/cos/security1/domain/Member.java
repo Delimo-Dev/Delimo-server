@@ -26,6 +26,12 @@ public class Member {
         @OneToMany(mappedBy = "member")
         private List<FriendList> friendList;
 
+        @OneToMany(mappedBy = "requested")
+        private List<FriendRequest> requestedList;
+
+        @OneToMany(mappedBy = "requester")
+        private List<FriendRequest> requesterList;
+
         @Builder
         public Member(String email, String password, String code, String token, String resolution) {
                 this.email = email;

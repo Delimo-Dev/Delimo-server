@@ -3,10 +3,14 @@ package com.cos.security1.repository.Impl;
 import com.cos.security1.domain.FriendRequest;
 import com.cos.security1.repository.FriendRequestRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import com.cos.security1.domain.Member;
+
 
 import java.util.List;
 
-public interface SpringDataJpaFriendListRepository extends JpaRepository<FriendRequest, Long>, FriendRequestRepository {
+public interface SpringDataJpaFriendRequestRepository extends JpaRepository<FriendRequest, Long>, FriendRequestRepository {
     @Override
     FriendRequest save(FriendRequest friendRequest);
 
@@ -18,4 +22,7 @@ public interface SpringDataJpaFriendListRepository extends JpaRepository<FriendR
 
     @Override
     List<FriendRequest> findAllBy();
+
+    @Query(value = "select fr FROM FriendRequest fr where fr.requester = :requester and fr.requested = :requested")
+    List<FriendRequest> findRequest(@Param("requester") Member requester, @Param("requested") Member requested);
 }

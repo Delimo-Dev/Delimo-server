@@ -18,7 +18,7 @@ public interface FriendRequestService {
     // 모든 친구 리스트 찾기
     List<FriendRequest> findAllFriends(Member member);
 
-    // id1 -> id2 친구 신청
-    FriendRequest requestFriend(Member member1, Member member2);
+    // requester-> requested 친구 신청
+    FriendRequest requestFriend(Member requester, Member requested);
     List<FriendRequest> getAllFriendRequest();
 }

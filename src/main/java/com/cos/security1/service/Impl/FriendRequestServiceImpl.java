@@ -32,8 +32,14 @@ public class FriendRequestServiceImpl implements FriendRequestService {
                 .requester(requester)
                 .requested(requested)
                 .build();
-        return friendRequestRepository.save(friendRequest);
+
+        List<FriendRequest> findRequests = friendRequestRepository.findRequest(requester, requested);
+        if(findRequests.size() == 0) {
+            return friendRequestRepository.save(friendRequest);
+        }
+        return null;
     }
+
 
 
     @Override

@@ -13,8 +13,8 @@ public class FriendRequestedResponse {
 
 
     public FriendRequestedResponse(){
-        this.code = StatusCode.NOT_FOUND;
-        this.message = ResponseMessage.NOT_FOUND_USER;
+        this.code = StatusCode.BAD_REQUEST;
+        this.message = ResponseMessage.REQUEST_EXISTED;
         this.data = null;
     }
 

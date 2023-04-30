@@ -1,8 +1,10 @@
 package com.cos.security1.controller;
 
+import com.cos.security1.controller.response.FriendFoundResponse;
 import com.cos.security1.controller.response.FriendRequestedResponse;
 import com.cos.security1.controller.status.ResponseMessage;
 import com.cos.security1.controller.status.StatusCode;
+import com.cos.security1.domain.FriendRequest;
 import com.cos.security1.domain.Member;
 import com.cos.security1.dto.FriendDto;
 import com.cos.security1.service.FriendRequestService;
@@ -47,9 +49,10 @@ public class FriendController {
         // 인증 실패
         Optional<Member> memberFind = findMember(token);
         if(memberFind.isEmpty()){
-            response.builder()
+            response = FriendRequestedResponse.builder()
                     .code(StatusCode.UNAUTHORIZED)
-                    .message(ResponseMessage.UNAUTHORIZED);
+                    .message(ResponseMessage.UNAUTHORIZED)
+                    .build();
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
 
@@ -59,21 +62,55 @@ public class FriendController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        friendRequestService.requestFriend(memberFind.get(), friend.get());
+        // 자기 자신인 경우
+        if (friend.get().getId().equals(memberFind.get().getId())){
+            response.setCode(StatusCode.BAD_REQUEST);
+            response.setMessage(ResponseMessage.REQUEST_FAILED);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
 
-        response.builder()
+        // 이미 친구로 신청한 경우
+        FriendRequest findRequest = friendRequestService.requestFriend(memberFind.get(), friend.get());
+        if (findRequest == null){
+            response.setCode(StatusCode.BAD_REQUEST);
+            response.setMessage(ResponseMessage.REQUEST_EXISTED);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        response = FriendRequestedResponse.builder()
                 .code(StatusCode.CREATED)
-                .message(ResponseMessage.FRIEND_REQUESTED_SUCCESS);
+                .message(ResponseMessage.FRIEND_REQUESTED_SUCCESS)
+                .build();
 
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 
-    // 친구 신청에 대해 승인 (FriendRequest 삭제와 동시에 friendlist에 추가)
+    // 친구 코드로 친구 검색하기
+    @GetMapping("/findByCode")
+    ResponseEntity<FriendFoundResponse> findByCode(@RequestParam String code){
+        FriendFoundResponse response = new FriendFoundResponse();
 
+        Optional<Member> findMember = friendRequestService.findByCode(code);
+        if(findMember.isPresent()){
+            response = FriendFoundResponse.builder()
+                    .code(StatusCode.OK)
+                    .message(ResponseMessage.FRIEND_FOUND)
+                    .data(findMember.get().getId())
+                    .build();
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+
+    // 친구 신청에 대해 승인 (FriendRequest 삭제와 동시에 friendlist에 추가)
 
     // 친구 신청에 대한 삭제 (FriendRequest 삭제)
 
     // 현재 친구들 목록 보기
 
+    // 친구 신청 보낸 친구 목록들 보기
+
+    // 받은 친구 신청 목록들 보기
 
 }

@@ -6,11 +6,8 @@ import com.cos.security1.dto.AuthenticationDto;
 import com.cos.security1.repository.FriendRequestRepository;
 import com.cos.security1.repository.MemberRepository;
 import com.cos.security1.security.SecurityService;
-import com.cos.security1.service.FriendRequestService;
 import com.cos.security1.service.Impl.UuidService;
 import jakarta.transaction.Transactional;
-import org.aspectj.lang.annotation.After;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +16,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -70,9 +66,18 @@ public class RequestFriendTest {
         System.out.println("findMember2 = " + findMember2.get());
 
         FriendRequest request = new FriendRequest(findMember1.get(), findMember2.get());
-        friendRequestRepository.save(request);
+        testEntityManager.persist(request);
 
-        System.out.println(friendRequestRepository.findAllBy());
+        System.out.println("findAll " + friendRequestRepository.findAllBy());
+    }
+
+    @Test
+    void 자기자신에게_친구신청_보내기_실패(){
+        Optional<Member> findMember1 = memberRepository.findById(1L);
+
+        FriendRequest friendRequest = new FriendRequest(findMember1.get(), findMember1.get());
+
+        testEntityManager.persist(friendRequest);
     }
 
     @Test
