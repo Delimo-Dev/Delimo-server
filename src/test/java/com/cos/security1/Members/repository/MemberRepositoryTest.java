@@ -1,9 +1,8 @@
 package com.cos.security1.Members.repository;
 
 import com.cos.security1.domain.Member;
-import com.cos.security1.dto.AuthenticationDto;
+import com.cos.security1.repository.FriendRequestRepository;
 import com.cos.security1.repository.MemberRepository;
-import com.cos.security1.security.SecurityService;
 import com.cos.security1.service.Impl.UuidService;
 import jakarta.transaction.Transactional;
 import org.assertj.core.api.Assertions;
@@ -18,6 +17,8 @@ import java.util.List;
 public class MemberRepositoryTest {
     @Autowired
     MemberRepository memberRepository;
+    @Autowired
+    FriendRequestRepository friendRequestRepository;
 
     @Test
     void 두명의_회원_신규회원가입(){

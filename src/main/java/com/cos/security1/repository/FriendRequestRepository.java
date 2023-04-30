@@ -1,7 +1,8 @@
 package com.cos.security1.repository;
 
-import com.cos.security1.domain.FriendList;
+
 import com.cos.security1.domain.FriendRequest;
+import com.cos.security1.domain.Member;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +20,8 @@ public interface FriendRequestRepository {
 
     // 보낸 친구 신청 찾기 (requester이 자기 자신)
 
+    // 이미 요청한 경우
+    List<FriendRequest> findRequest(Member requester, Member requested);
 
     List<FriendRequest> findAllByRequester(Long requesterId);
 
