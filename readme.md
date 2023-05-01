@@ -166,9 +166,10 @@ GET /users/myPage
 - 친구 코드로 친구를 검색합니다.
 
 ### URL / Method
-
+- React Native에서 Get 메서드에 대해 Request Body 확인하지 않으므로 Post로 변경
+- Params로 변경 가능성 존재
 ```jsx
-GET /friend/findByCode
+POST /friend/findByCode
 ```
 
 ### Request Body
@@ -208,7 +209,7 @@ GET /friend/findByCode
 ### URL / Method
 
 ```jsx
-GET /friend/request
+POST /friend/request
 ```
 
 ### Request Headers
@@ -267,7 +268,7 @@ GET /friend/request
 ### URL / Method
 
 ```jsx
-GET /friend/acceptRequest
+POST /friend/acceptRequest
 ```
 
 ### Request Headers
@@ -275,15 +276,18 @@ GET /friend/acceptRequest
 - **Authorization : Bearer Token**
 - Content-Type : application/json; charset=utf-8
 
-### Response Body
-
-- 친구 신청을 승인하면 requesterIdList, requestedIdList에서 삭제가 되고, friendList에 추가됩니다.
-
+### Request Body
 ```json
 {
     "friendId":1
 }
 ```
+
+### Response Body
+
+- 친구 신청을 승인하면 requesterIdList, requestedIdList에서 삭제가 되고, friendList에 추가됩니다.
+
+
 
 - 자기 자신을 검색하거나, 친구 신청이 이미 완료됐거나, 친구 검색에 실패한 경우 400 code를 반환합니다.
 
@@ -300,7 +304,7 @@ GET /friend/acceptRequest
 ### URL / Method
 
 ```jsx
-GET /friend/rejectRequest
+POST /friend/rejectRequest
 ```
 
 ### Request Headers
@@ -308,15 +312,17 @@ GET /friend/rejectRequest
 - **Authorization : Bearer Token**
 - Content-Type : application/json; charset=utf-8
 
-### Response Body
-
-- 친구 신청 거절을 완료하면, friendRequest 객체가 삭제됩니다.
-
+### Request Body
 ```json
 {
     "friendId":1
 }
 ```
+
+### Response Body
+
+- 친구 신청 거절을 완료하면, friendRequest 객체가 삭제됩니다.
+
 
 ```json
 {

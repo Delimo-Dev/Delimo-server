@@ -99,7 +99,7 @@ public class FriendController {
      * @param code
      * @return
      */
-    @GetMapping("/findByCode")
+    @PostMapping("/findByCode")
     ResponseEntity<FriendFoundResponse> findByCode(@RequestBody CodeDto code) {
         FriendFoundResponse response = new FriendFoundResponse();
 
