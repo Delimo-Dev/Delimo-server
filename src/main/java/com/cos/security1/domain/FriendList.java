@@ -1,11 +1,13 @@
 package com.cos.security1.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "FRIEND_TBL")
 @NoArgsConstructor
+@Getter
 public class FriendList {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

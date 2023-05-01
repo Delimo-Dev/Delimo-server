@@ -9,6 +9,7 @@ import com.cos.security1.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,13 +54,40 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     }
 
     @Override
-    public Optional<Member> findByCode(String code) {
-        return memberRepository.findByCode(code);
+    public List<Long> getFriendList(Member member){
+        List<Long> friendIdList = new ArrayList<>();
+        member.getFriendList().forEach((e)->friendIdList.add(e.getFriendId()));
+        return friendIdList;
     }
 
     @Override
-    public List<FriendRequest> findAllFriends(Member member) {
-        return friendRequestRepository.findAllByRequester(member.getId());
+    public List<Long> getRequesterList(Member member){
+        List<Long> requestedIdList = new ArrayList<>();
+        List<FriendRequest> requestList = getAllFriendRequest();
+        for(FriendRequest request:requestList){
+            if(request.getRequester().getId().equals(member.getId())){
+                requestedIdList.add(request.getRequested().getId());
+            }
+        }
+        return requestedIdList;
+    }
+
+    @Override
+    public List<Long> getRequestedList(Member member){
+        List<Long> requesterIdList = new ArrayList<>();
+        List<FriendRequest> requestList = getAllFriendRequest();
+
+        for(FriendRequest request : requestList){
+            if (request.getRequested().getId().equals(member.getId())){
+                requesterIdList.add(request.getRequester().getId());
+            }
+        }
+        return requesterIdList;
+    }
+
+    @Override
+    public Optional<Member> findByCode(String code) {
+        return memberRepository.findByCode(code);
     }
 
     @Override

@@ -14,7 +14,7 @@ public class FriendRequestedResponse {
 
     public FriendRequestedResponse(){
         this.code = StatusCode.BAD_REQUEST;
-        this.message = ResponseMessage.REQUEST_EXISTED;
+        this.message = ResponseMessage.FRIEND_NOT_FOUND;
         this.data = null;
     }
 

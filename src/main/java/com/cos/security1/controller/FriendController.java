@@ -36,9 +36,12 @@ public class FriendController {
         return memberService.verifyMember(bearerToken);
     }
 
-    // 친구 검색 (코드로 검색 하기)
-
-    // 친구 신청 하기 (Requester -> Requested)
+    /**
+     * 친구 신청 보내기 (requester -> requested)
+     * @param token
+     * @param friendDto
+     * @return
+     */
     @PostMapping("/request")
     ResponseEntity<FriendRequestedResponse> requestFriend(
             @RequestHeader("Authorization") String token,
@@ -69,8 +72,9 @@ public class FriendController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
-        // 이미 친구로 신청한 경우
+
         FriendRequest findRequest = friendRequestService.requestFriend(memberFind.get(), friend.get());
+        // 이미 친구로 신청한 경우
         if (findRequest == null){
             response.setCode(StatusCode.BAD_REQUEST);
             response.setMessage(ResponseMessage.REQUEST_EXISTED);
@@ -84,7 +88,11 @@ public class FriendController {
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 
-    // 친구 코드로 친구 검색하기
+    /**
+     * 친구 코드로 친구 검색하기
+     * @param code
+     * @return
+     */
     @GetMapping("/findByCode")
     ResponseEntity<FriendFoundResponse> findByCode(@RequestParam String code){
         FriendFoundResponse response = new FriendFoundResponse();
@@ -108,9 +116,5 @@ public class FriendController {
     // 친구 신청에 대한 삭제 (FriendRequest 삭제)
 
     // 현재 친구들 목록 보기
-
-    // 친구 신청 보낸 친구 목록들 보기
-
-    // 받은 친구 신청 목록들 보기
 
 }
