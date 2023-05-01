@@ -1,22 +1,16 @@
 package com.cos.security1.controller;
 
-import com.cos.security1.controller.response.EmailVerificationResponse;
-import com.cos.security1.controller.response.AuthResponse;
-import com.cos.security1.controller.response.SigninResponse;
-import com.cos.security1.controller.status.ResponseMessage;
-import com.cos.security1.controller.status.StatusCode;
+import com.cos.security1.controller.response.*;
+import com.cos.security1.controller.status.*;
 import com.cos.security1.domain.Member;
-import com.cos.security1.dto.EmailDto;
-import com.cos.security1.dto.MemberDto;
-import com.cos.security1.dto.ResolutionDto;
-import com.cos.security1.dto.TokenDto;
-import com.cos.security1.service.MemberService;
+import com.cos.security1.dto.*;
+import com.cos.security1.service.*;
+
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 import java.util.Optional;
@@ -26,10 +20,12 @@ import java.util.Optional;
 @RequestMapping("/users")
 public class MemberController {
     private final MemberService memberService;
+    private final FriendRequestService friendRequestService;
 
     @Autowired
-    MemberController(MemberService memberService){
+    MemberController(MemberService memberService, FriendRequestService friendRequestService){
         this.memberService = memberService;
+        this.friendRequestService = friendRequestService;
     }
 
     /**
@@ -127,10 +123,20 @@ public class MemberController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
+        MyPageResponseDto myPageResponseDto = MyPageResponseDto.builder()
+                .id(member.get().getId())
+                .code(member.get().getCode())
+                .email(member.get().getEmail())
+                .token(member.get().getToken())
+                .friendList(friendRequestService.getFriendList(member.get()))
+                .requestedList(friendRequestService.getRequestedList(member.get()))
+                .requesterList(friendRequestService.getRequesterList(member.get()))
+                .build();
+
         response = AuthResponse.builder()
                 .code(StatusCode.OK)
                 .message(ResponseMessage.MEMBER_INFO_SUCCESS)
-                .data(member)
+                .data(myPageResponseDto)
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.OK);
