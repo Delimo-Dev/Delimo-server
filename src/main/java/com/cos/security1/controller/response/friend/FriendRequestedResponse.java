@@ -1,4 +1,4 @@
-package com.cos.security1.controller.response;
+package com.cos.security1.controller.response.friend;
 
 import com.cos.security1.controller.status.ResponseMessage;
 import com.cos.security1.controller.status.StatusCode;
@@ -6,22 +6,21 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class AuthResponse {
+public class FriendRequestedResponse {
     private int code;
     private String message;
     private Object data;
 
-    public AuthResponse(){
-        this.code = StatusCode.UNAUTHORIZED;
-        this.message = ResponseMessage.UNAUTHORIZED;
+
+    public FriendRequestedResponse(){
+        this.code = StatusCode.BAD_REQUEST;
+        this.message = ResponseMessage.FRIEND_NOT_FOUND;
         this.data = null;
     }
 
     @Builder
-    public AuthResponse(int code, String message, Object data){
+    public FriendRequestedResponse(int code, String message){
         this.code = code;
         this.message = message;
-        this.data = data;
     }
-
 }

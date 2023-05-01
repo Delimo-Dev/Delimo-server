@@ -11,9 +11,9 @@ public class MemoryMemberRepository {
 
     static{
         users = new ArrayList<>();
-        users.add(new MemberDto("test1","1234"));
-        users.add(new MemberDto("test2","1234"));
-        users.add(new MemberDto("lee","1234"));
+        users.add(new MemberDto("test1","닉넴", "1234"));
+        users.add(new MemberDto("test2","닉넴", "1234"));
+        users.add(new MemberDto("lee","닉넴", "1234"));
     }
 
     // CREATE
@@ -31,7 +31,7 @@ public class MemoryMemberRepository {
         return users.stream()
                 .filter(memberDto -> memberDto.getEmail().equals(email))
                 .findAny()
-                .orElse(new MemberDto("",""));
+                .orElse(new MemberDto("", "",""));
     }
 
     // UPDATE
@@ -39,7 +39,7 @@ public class MemoryMemberRepository {
         users.stream()
                 .filter(memberDTO -> memberDTO.getEmail().equals(email))
                 .findAny()
-                .orElse(new MemberDto("",""))
+                .orElse(new MemberDto("","",""))
                 .setPassword(memberDto.getPassword());
     }
 

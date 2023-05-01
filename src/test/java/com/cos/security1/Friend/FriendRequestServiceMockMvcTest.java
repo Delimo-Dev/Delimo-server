@@ -98,22 +98,22 @@ public class FriendRequestServiceMockMvcTest {
         Optional<Member> findMember1 = memberRepository.findById(1L);
         Optional<Member> findMember2 = memberRepository.findById(2L);
 
-        friendRequestService.requestFriend(findMember1.get(), findMember2.get());
+        // friendRequestService.requestFriend(findMember1.get(), findMember2.get());
 
         MvcResult result = mockMvc.perform(post("/friend/request")
                         .header("Authorization", "bearer"+findMember1.get().getToken())
-                        .param("friendId", findMember1.get().getId().toString()))
-                .andExpect(status().isBadRequest())
+                        .param("friendId", findMember2.get().getId().toString()))
+                .andExpect(status().isOk())
                 .andReturn();
 
         String response = result.getResponse().getContentAsString();
         System.out.println("response = " + response);
 
-
     }
 
     @Test
     void 친구ID_탐색실패() throws Exception {
+
     }
 
     @Test

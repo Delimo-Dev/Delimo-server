@@ -1,6 +1,7 @@
 package com.cos.security1.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,4 +19,10 @@ public class FriendList {
 
     @Column(name = "friend_id")
     private Long friendId;
+
+    @Builder
+    FriendList(Member member, Long friendId){
+        this.member = member;
+        this.friendId = friendId;
+    }
 }

@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FriendRequestService {
-    List<FriendRequest> findByRequester(Long requesterId);
-    List<FriendRequest> findByRequested(Long requestedId);
     Optional<Member> findByCode(String code);
+    FriendRequest requestFriend(Member requester, Member requested);
     List<Long> getFriendList(Member member);
     List<Long> getRequesterList(Member member);
     List<Long> getRequestedList(Member member);
-    FriendRequest requestFriend(Member requester, Member requested);
     List<FriendRequest> getAllFriendRequest();
+    List<FriendRequest> findFriendRequest(Member requester, Member requested);
+
+    void acceptFriend(FriendRequest friendRequest);
+    void rejectFriend(FriendRequest friendRequest);
 }

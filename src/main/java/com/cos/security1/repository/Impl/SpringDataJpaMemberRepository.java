@@ -21,11 +21,7 @@ public interface SpringDataJpaMemberRepository extends JpaRepository<Member, Lon
     Optional<Member> findByCode(String code);
 
     @Override
-    Optional<Member> findByPassword(String password);
-
-    @Override
     Optional<Member> findByToken(String token);
-
 
     @Query("update Member m set m.resolution = :resolution where m.id = :id")
     @Modifying

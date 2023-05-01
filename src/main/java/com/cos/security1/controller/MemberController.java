@@ -1,6 +1,8 @@
 package com.cos.security1.controller;
 
-import com.cos.security1.controller.response.*;
+import com.cos.security1.controller.response.auth.AuthResponse;
+import com.cos.security1.controller.response.auth.EmailVerificationResponse;
+import com.cos.security1.controller.response.auth.SigninResponse;
 import com.cos.security1.controller.status.*;
 import com.cos.security1.domain.Member;
 import com.cos.security1.dto.*;
@@ -128,6 +130,7 @@ public class MemberController {
                 .code(member.get().getCode())
                 .email(member.get().getEmail())
                 .token(member.get().getToken())
+                .resolution(member.get().getResolution())
                 .friendList(friendRequestService.getFriendList(member.get()))
                 .requestedList(friendRequestService.getRequestedList(member.get()))
                 .requesterList(friendRequestService.getRequesterList(member.get()))

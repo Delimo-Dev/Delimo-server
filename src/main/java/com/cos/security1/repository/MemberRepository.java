@@ -13,7 +13,6 @@ public interface MemberRepository {
     Member save(Member member);
     Optional<Member> findById(Long id);
     Optional<Member> findByEmail(String email);
-    Optional<Member> findByPassword(String password);
     Optional<Member> findByCode(String code);
     Optional<Member> findByToken(String token);
     List<Member> findAll();

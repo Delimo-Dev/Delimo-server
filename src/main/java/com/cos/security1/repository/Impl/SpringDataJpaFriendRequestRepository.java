@@ -23,6 +23,9 @@ public interface SpringDataJpaFriendRequestRepository extends JpaRepository<Frie
     @Override
     List<FriendRequest> findAllBy();
 
+    @Override
+    void delete(FriendRequest friendRequest);
+
     @Query(value = "select fr FROM FriendRequest fr where fr.requester = :requester and fr.requested = :requested")
     List<FriendRequest> findRequest(@Param("requester") Member requester, @Param("requested") Member requested);
 }

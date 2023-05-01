@@ -15,12 +15,19 @@ public class Member {
         @Id  @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "MEMBER_ID")
         private Long id;
+
         private String email;
+
+        private String nickname;
+
         private String password;
+
         @Column(nullable = false)
         private String token;
+
         @Column(name = "USERCODE")
         private String code;
+
         private String resolution;
 
         @OneToMany(mappedBy = "member")
@@ -33,8 +40,9 @@ public class Member {
         private List<FriendRequest> requesterList;
 
         @Builder
-        public Member(String email, String password, String code, String token, String resolution) {
+        public Member(String email, String nickname, String password, String code, String token, String resolution) {
                 this.email = email;
+                this.nickname = nickname;
                 this.password = password;
                 this.code = code;
                 this.token = token;

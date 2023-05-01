@@ -17,8 +17,8 @@ public class MemberServiceTest {
 
     @Test
     void 이메일_중복_회원가입(){
-        MemberDto memberDto = new MemberDto("lyb2325@gmail.com", "1234");
-        MemberDto memberDto2 = new MemberDto("lyb2325@gmail.com", "1234");
+        MemberDto memberDto = new MemberDto("lyb2325@gmail.com", "옙", "1234");
+        MemberDto memberDto2 = new MemberDto("lyb2325@gmail.com", "옙", "1234");
 
 
         try {

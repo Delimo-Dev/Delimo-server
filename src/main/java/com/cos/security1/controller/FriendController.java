@@ -1,7 +1,9 @@
 package com.cos.security1.controller;
 
-import com.cos.security1.controller.response.FriendFoundResponse;
-import com.cos.security1.controller.response.FriendRequestedResponse;
+import com.cos.security1.controller.response.friend.AcceptFriendResponse;
+import com.cos.security1.controller.response.friend.FriendFoundResponse;
+import com.cos.security1.controller.response.friend.FriendRequestedResponse;
+import com.cos.security1.controller.response.friend.RejectFriendResponse;
 import com.cos.security1.controller.status.ResponseMessage;
 import com.cos.security1.controller.status.StatusCode;
 import com.cos.security1.domain.FriendRequest;
@@ -15,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -112,9 +115,79 @@ public class FriendController {
 
 
     // 친구 신청에 대해 승인 (FriendRequest 삭제와 동시에 friendlist에 추가)
+    @PostMapping("/acceptRequest")
+    ResponseEntity<AcceptFriendResponse> acceptFriendRequest(
+            @RequestHeader("Authorization") String token,
+            @RequestBody FriendDto friendDto)
+    {
+        AcceptFriendResponse response = new AcceptFriendResponse();
 
+        // 인증 실패
+        Optional<Member> memberFind = findMember(token);
+        if(memberFind.isEmpty()){
+            response = AcceptFriendResponse.builder()
+                    .code(StatusCode.UNAUTHORIZED)
+                    .message(ResponseMessage.UNAUTHORIZED)
+                    .build();
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+
+        // 친구 찾지 못한 경우
+        Optional<Member> friend = memberService.getUserById(friendDto.getFriendId());
+        if(friend.isEmpty()){
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
+        List<FriendRequest> friendRequest = friendRequestService.findFriendRequest(friend.get(), memberFind.get());
+        if(friendRequest.size() == 0){
+            response = AcceptFriendResponse.builder()
+                    .code(StatusCode.BAD_REQUEST)
+                    .message(ResponseMessage.FRIEND_REQUEST_ACCEPTED_FAILED)
+                    .build();
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        friendRequestService.acceptFriend(friendRequest.get(0));
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+
+    }
     // 친구 신청에 대한 삭제 (FriendRequest 삭제)
+    @PostMapping("/rejectRequest")
+    ResponseEntity<RejectFriendResponse> rejectFriendRequest(
+            @RequestHeader("Authorization") String token,
+            @RequestBody FriendDto friendDto)
+    {
+        RejectFriendResponse response = new RejectFriendResponse();
 
+        // 인증 실패
+        Optional<Member> memberFind = findMember(token);
+        if(memberFind.isEmpty()){
+            response = RejectFriendResponse.builder()
+                    .code(StatusCode.UNAUTHORIZED)
+                    .message(ResponseMessage.UNAUTHORIZED)
+                    .build();
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+
+        // 친구 찾지 못한 경우
+        Optional<Member> friend = memberService.getUserById(friendDto.getFriendId());
+        if(friend.isEmpty()){
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
+        List<FriendRequest> friendRequest = friendRequestService.findFriendRequest(friend.get(), memberFind.get());
+        if(friendRequest.size() == 0){
+            response = RejectFriendResponse.builder()
+                    .code(StatusCode.BAD_REQUEST)
+                    .message(ResponseMessage.FRIEND_REQUEST_ACCEPTED_FAILED)
+                    .build();
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        friendRequestService.rejectFriend(friendRequest.get(0));
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+
+    }
     // 현재 친구들 목록 보기
 
 }

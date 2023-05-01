@@ -1,7 +1,9 @@
 package com.cos.security1.service.Impl;
 
+import com.cos.security1.domain.FriendList;
 import com.cos.security1.domain.FriendRequest;
 import com.cos.security1.domain.Member;
+import com.cos.security1.repository.FriendListRepository;
 import com.cos.security1.repository.FriendRequestRepository;
 import com.cos.security1.repository.MemberRepository;
 import com.cos.security1.service.FriendRequestService;
@@ -16,15 +18,22 @@ import java.util.Optional;
 @Service
 public class FriendRequestServiceImpl implements FriendRequestService {
 
-    private MemberService memberService;
+    private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final FriendRequestRepository friendRequestRepository;
+    private final FriendListRepository friendListRepository;
 
     @Autowired
-    public FriendRequestServiceImpl(MemberService memberService, MemberRepository memberRepository, FriendRequestRepository friendListRepository) {
+    public FriendRequestServiceImpl(MemberService memberService, MemberRepository memberRepository, FriendRequestRepository friendListRepository, FriendListRepository friendListRepository1) {
         this.memberService = memberService;
         this.memberRepository = memberRepository;
         this.friendRequestRepository = friendListRepository;
+        this.friendListRepository = friendListRepository1;
+    }
+
+    @Override
+    public Optional<Member> findByCode(String code) {
+        return memberRepository.findByCode(code);
     }
 
     @Override
@@ -39,18 +48,6 @@ public class FriendRequestServiceImpl implements FriendRequestService {
             return friendRequestRepository.save(friendRequest);
         }
         return null;
-    }
-
-
-
-    @Override
-    public List<FriendRequest> findByRequester(Long requesterId) {
-        return friendRequestRepository.findAllByRequester(requesterId);
-    }
-
-    @Override
-    public List<FriendRequest> findByRequested(Long requestedId) {
-        return friendRequestRepository.findAllByRequested(requestedId);
     }
 
     @Override
@@ -86,15 +83,39 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     }
 
     @Override
-    public Optional<Member> findByCode(String code) {
-        return memberRepository.findByCode(code);
-    }
-
-    @Override
     public List<FriendRequest> getAllFriendRequest() {
         return friendRequestRepository.findAllBy();
     }
 
+    @Override
+    public List<FriendRequest> findFriendRequest(Member requester, Member requested) {
+        return friendRequestRepository.findRequest(requester, requested);
+    }
+
+    @Override
+    public void acceptFriend(FriendRequest friendRequest) {
+        // 친구 리스트에 추가
+        FriendList friendListForRequester = FriendList.builder()
+                .member(friendRequest.getRequester())
+                .friendId(friendRequest.getRequested().getId())
+                .build();
+
+        FriendList friendListForRequested = FriendList.builder()
+                .member(friendRequest.getRequested())
+                .friendId(friendRequest.getRequester().getId())
+                .build();
+
+        friendListRepository.save(friendListForRequested);
+        friendListRepository.save(friendListForRequester);
+
+        // 해당 FriendRequest 삭제
+        friendRequestRepository.delete(friendRequest);
+    }
+
+    @Override
+    public void rejectFriend(FriendRequest friendRequest) {
+        friendRequestRepository.delete(friendRequest);
+    }
 
 
 }
