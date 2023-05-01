@@ -130,6 +130,7 @@ public class MemberController {
                 .code(member.get().getCode())
                 .email(member.get().getEmail())
                 .token(member.get().getToken())
+                .nickname(member.get().getNickname())
                 .resolution(member.get().getResolution())
                 .friendList(friendRequestService.getFriendList(member.get()))
                 .requestedList(friendRequestService.getRequestedList(member.get()))

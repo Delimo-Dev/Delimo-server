@@ -19,6 +19,8 @@ public class ResponseMessage {
     public static final String FRIEND_REQUEST_REJECTED = "친구 신청 거절 완료";
     public static final String FRIEND_REQUEST_ACCEPTED_FAILED = "친구 신청 승인 실패";
     public static final String FRIEND_REQUEST_REJECTED_FAILED = "친구 신청 거절 실패";
+    public static final String FRIEND_LIST_SUCCESSFUL = "친구 목록 가져오기 성공";
+    public static final String FRIEND_LIST_FAILED = "친구 목록 가져오기 실패";
 
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터 베이스 에러";

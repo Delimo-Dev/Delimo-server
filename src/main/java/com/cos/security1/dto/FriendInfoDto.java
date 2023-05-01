@@ -5,7 +5,10 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
-public class FriendDto {
+@Getter
+@Setter
+public class FriendInfoDto {
     private Long friendId;
+    private String nickname;
+    private String resolution;
 }
