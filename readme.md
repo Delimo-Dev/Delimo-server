@@ -119,21 +119,20 @@ GET /users/myPage
 
 ```json
 {
-  "code": 200,
-  "message": "회원의 정보를 성공적으로 불러왔습니다.",
-  "data": {
-    "id": 1,
-    "email": "1234@gmail.com",
-    "nickname":"예빈",
-    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0IiwiZXhwIjoxNjgyODY0ODQ0fQ.gjhdUxtf81pvp8EZfR9YO94_ZXkgQswQCPdJcVcXEIk",
-    "code": "eeea16ab",
-    "resolution": null,
-    "friendList": [],
-    "requestedList": [
-      2
-    ],
-    "requesterList": []
-  }
+    "code": 200,
+    "message": "회원의 정보를 성공적으로 불러왔습니다.",
+    "data": {
+        "id": 1,
+        "email": "1234@gmail.com",
+        "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0IiwiZXhwIjoxNjgyODY0ODQ0fQ.gjhdUxtf81pvp8EZfR9YO94_ZXkgQswQCPdJcVcXEIk",
+        "code": "eeea16ab",
+				"resolution": null,
+        "friendList": [],
+        "requestedList": [
+            2
+        ],
+        "requesterList": []
+    }
 }
 ```
 
@@ -144,7 +143,6 @@ GET /users/myPage
   "data": {
     "id": 1,
     "email": "1234@gmail.com",
-    "nickname": "예빈",
     "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0IiwiZXhwIjoxNjgyODY0ODQ0fQ.gjhdUxtf81pvp8EZfR9YO94_ZXkgQswQCPdJcVcXEIk",
     "code": "eeea16ab",
     "resolution": null,
@@ -163,7 +161,47 @@ GET /users/myPage
 }
 ```
 
-# 2. 친구 신청을 보냅니다. ✅
+# 2. code로 친구를 검색합니다.
+
+- 친구 코드로 친구를 검색합니다.
+
+### URL / Method
+
+```jsx
+GET /friend/findByCode
+```
+
+### Request Body
+
+- Content-Type : application/json; charset=utf-8
+
+```json
+{
+    "code":"ba45fb96f"
+}
+```
+
+### Response Body
+
+```json
+{
+    "code": 200,
+    "message": "친구 검색 성공",
+    "data": {
+        "friendId": 1
+    }
+}
+```
+
+```json
+{
+    "code": 404,
+    "message": "회원을 찾을 수 없습니다.",
+    "data": null
+}
+```
+
+# 3. 친구 신청을 보냅니다. ✅
 
 - 친구 신청을 보냅니다.
 
@@ -177,6 +215,14 @@ GET /friend/request
 
 - **Authorization : Bearer Token**
 - Content-Type : application/json; charset=utf-8
+
+### Request Body
+
+```json
+{
+    "friendId":1
+}
+```
 
 ### Response Body
 
@@ -216,7 +262,7 @@ GET /friend/request
 }
 ```
 
-# 3. 친구 신청을 승인합니다. ✅
+# 4. 친구 신청을 승인합니다. ✅
 
 ### URL / Method
 
@@ -249,7 +295,7 @@ GET /friend/acceptRequest
 }
 ```
 
-# 4. 친구 신청을 거절합니다. ✅
+# 5. 친구 신청을 거절합니다. ✅
 
 ### URL / Method
 
@@ -279,6 +325,5 @@ GET /friend/rejectRequest
     "data": null
 }
 ```
-
 </details>
 

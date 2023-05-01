@@ -12,16 +12,18 @@ public class MyPageResponseDto {
     String email;
     String token;
     String code;
+    String nickname;
     String resolution;
     List<Long> friendList;
     List<Long> requestedList;
     List<Long> requesterList;
 
     @Builder
-    MyPageResponseDto(Long id, String email, String token, String code, String resolution, List<Long> friendList, List<Long> requestedList, List<Long> requesterList){
+    MyPageResponseDto(Long id, String email, String nickname, String token, String code, String resolution, List<Long> friendList, List<Long> requestedList, List<Long> requesterList){
         this.id = id;
         this.email = email;
         this.token = token;
+        this.nickname = nickname;
         this.code = code;
         this.resolution = resolution;
         this.friendList = friendList;

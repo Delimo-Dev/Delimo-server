@@ -8,7 +8,9 @@ import com.cos.security1.controller.status.ResponseMessage;
 import com.cos.security1.controller.status.StatusCode;
 import com.cos.security1.domain.FriendRequest;
 import com.cos.security1.domain.Member;
+import com.cos.security1.dto.CodeDto;
 import com.cos.security1.dto.FriendDto;
+import com.cos.security1.dto.FriendFoundDto;
 import com.cos.security1.service.FriendRequestService;
 import com.cos.security1.service.MemberService;
 import jakarta.transaction.Transactional;
@@ -97,15 +99,18 @@ public class FriendController {
      * @return
      */
     @GetMapping("/findByCode")
-    ResponseEntity<FriendFoundResponse> findByCode(@RequestParam String code){
+    ResponseEntity<FriendFoundResponse> findByCode(@RequestBody CodeDto code){
         FriendFoundResponse response = new FriendFoundResponse();
 
-        Optional<Member> findMember = friendRequestService.findByCode(code);
+        Optional<Member> findMember = friendRequestService.findByCode(code.getCode());
         if(findMember.isPresent()){
+            FriendDto friendDto = new FriendDto();
+            friendDto.setFriendId(findMember.get().getId());
+
             response = FriendFoundResponse.builder()
                     .code(StatusCode.OK)
                     .message(ResponseMessage.FRIEND_FOUND)
-                    .data(findMember.get().getId())
+                    .data(friendDto)
                     .build();
             return new ResponseEntity<>(response, HttpStatus.OK);
         }

@@ -28,6 +28,7 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = Member.builder()
                 .email(user.getEmail())
+                .nickname(user.getNickname())
                 .token(new SecurityService().createToken(authenticationDto))
                 .password(new BCryptPasswordEncoder().encode(user.getPassword()))
                 .code(new UuidService().getUuid())
