@@ -5,22 +5,21 @@ import com.cos.security1.controller.status.StatusCode;
 import lombok.Builder;
 import lombok.Data;
 
-
 @Data
-public class FriendListResponse {
+public class RequestedListResponse {
     int code;
     String message;
     Object data;
 
 
-    public FriendListResponse() {
-        this.code = StatusCode.OK;
-        this.message = ResponseMessage.FRIEND_LIST_SUCCESSFUL;
+    public RequestedListResponse(){
+        this.code = StatusCode.CREATED;
+        this.message = ResponseMessage.FRIEND_REQUEST_LIST_SUCCESSFUL;
         this.data = null;
     }
 
     @Builder
-    public FriendListResponse(int code, String message, Object data) {
+    public RequestedListResponse(int code, String message, Object data){
         this.code = code;
         this.message = message;
         this.data = data;

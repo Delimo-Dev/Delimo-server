@@ -55,7 +55,7 @@ POST /users/new
 ### URL / Method
 
 ```jsx
-POST /users/updateResolution
+PATCH /users/updateResolution
 ```
 
 ### Request Headers
@@ -119,20 +119,20 @@ GET /users/myPage
 
 ```json
 {
-    "code": 200,
-    "message": "회원의 정보를 성공적으로 불러왔습니다.",
-    "data": {
-        "id": 1,
-        "email": "1234@gmail.com",
-        "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0IiwiZXhwIjoxNjgyODY0ODQ0fQ.gjhdUxtf81pvp8EZfR9YO94_ZXkgQswQCPdJcVcXEIk",
-        "code": "eeea16ab",
-				"resolution": null,
-        "friendList": [],
-        "requestedList": [
-            2
-        ],
-        "requesterList": []
-    }
+  "code": 200,
+  "message": "회원의 정보를 성공적으로 불러왔습니다.",
+  "data": {
+    "id": 1,
+    "email": "1234@gmail.com",
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0IiwiZXhwIjoxNjgyODY0ODQ0fQ.gjhdUxtf81pvp8EZfR9YO94_ZXkgQswQCPdJcVcXEIk",
+    "code": "eeea16ab",
+    "resolution": null,
+    "friendList": [],
+    "requestedList": [
+      2
+    ],
+    "requesterList": []
+  }
 }
 ```
 
@@ -286,9 +286,6 @@ POST /friend/acceptRequest
 ### Response Body
 
 - 친구 신청을 승인하면 requesterIdList, requestedIdList에서 삭제가 되고, friendList에 추가됩니다.
-
-
-
 - 자기 자신을 검색하거나, 친구 신청이 이미 완료됐거나, 친구 검색에 실패한 경우 400 code를 반환합니다.
 
 ```json
@@ -328,6 +325,91 @@ POST /friend/rejectRequest
 {
     "code": 201,
     "message": "친구 신청 거절 완료",
+    "data": null
+}
+```
+
+# 6. 친구 목록을 조회합니다. ✅
+
+### URL / Method
+
+```jsx
+GET /friend/list
+```
+
+### Request Headers
+
+- **Authorization : Bearer Token**
+- Content-Type : application/json; charset=utf-8
+
+### 
+
+### Response Body
+
+- 친구의 id, 닉네임, 한줄 소개를 표시합니다.
+
+```json
+{
+    "code": 200,
+    "message": "친구 목록 가져오기 성공",
+    "data": [
+        {
+            "friendId": 1,
+            "nickname": "ybrin",
+            "resolution": null
+        },
+        {
+            "friendId": 1,
+            "nickname": "ybrin",
+            "resolution": null
+        }
+    ]
+}
+```
+
+```json
+{
+    "code": 401,
+    "message": "회원 인증 실패",
+    "data": null
+}
+```
+
+# 7. 받은 친구 신청 목록을 조회합니다. ✅
+
+### URL / Method
+
+```jsx
+GET /friend/requested
+```
+
+### Request Headers
+
+- **Authorization : Bearer Token**
+- Content-Type : application/json; charset=utf-8
+
+### Response Body
+
+- 받은 친구 신청 각각에 대해, 친구 id, 닉네임, resolution이 표시됩니다.
+
+```json
+{
+    "code": 201,
+    "message": "친구 신청 목록을 성공적으로 가져왔습니다.",
+    "data": [
+        {
+            "friendId": 1,
+            "nickname": "ybrin",
+            "resolution": null
+        }
+    ]
+}
+```
+
+```json
+{
+    "code": 401,
+    "message": "회원 인증 실패",
     "data": null
 }
 ```

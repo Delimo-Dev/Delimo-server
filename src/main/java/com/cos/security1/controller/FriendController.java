@@ -72,24 +72,33 @@ public class FriendController {
 
         // 자기 자신인 경우
         if (friend.get().getId().equals(memberFind.get().getId())) {
-            response.setCode(StatusCode.BAD_REQUEST);
-            response.setMessage(ResponseMessage.REQUEST_FAILED);
+            response = FriendRequestedResponse.builder()
+                            .message(ResponseMessage.REQUEST_FAILED)
+                            .build();
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-
+        System.out.println(memberFind.get().getFriendList());
+        System.out.println(friend.get().getFriendList());
+        // 이미 친구인 경우
+        if (memberFind.get().getFriendList().contains(friend.get().getId())){
+            response = FriendRequestedResponse.builder()
+                    .message(ResponseMessage.FRIEND_INCLUDED)
+                    .build();
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
 
         FriendRequest findRequest = friendRequestService.requestFriend(memberFind.get(), friend.get());
         // 이미 친구로 신청한 경우
         if (findRequest == null) {
-            response.setCode(StatusCode.BAD_REQUEST);
-            response.setMessage(ResponseMessage.REQUEST_EXISTED);
+            response = FriendRequestedResponse.builder()
+                            .message(ResponseMessage.REQUEST_EXISTED)
+                            .build();
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
         response = FriendRequestedResponse.builder()
-                .code(StatusCode.CREATED)
-                .message(ResponseMessage.FRIEND_REQUESTED_SUCCESS)
-                .build();
-
+                    .code(StatusCode.CREATED)
+                    .message(ResponseMessage.FRIEND_REQUESTED_SUCCESS)
+                    .build();
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -123,7 +132,12 @@ public class FriendController {
     }
 
 
-    // 친구 신청에 대해 승인 (FriendRequest 삭제와 동시에 friendlist에 추가)
+    /**
+     * 친구 신청을 승인합니다.
+     * @param token
+     * @param friendDto
+     * @return
+     */
     @PostMapping("/acceptRequest")
     ResponseEntity<AcceptFriendResponse> acceptFriendRequest(
             @RequestHeader("Authorization") String token,
@@ -160,7 +174,12 @@ public class FriendController {
 
     }
 
-    // 친구 신청에 대한 삭제 (FriendRequest 삭제)
+    /**
+     * 친구 신청을 거절합니다.
+     * @param token
+     * @param friendDto
+     * @return
+     */
     @PostMapping("/rejectRequest")
     ResponseEntity<RejectFriendResponse> rejectFriendRequest(
             @RequestHeader("Authorization") String token,
@@ -197,11 +216,14 @@ public class FriendController {
 
     }
 
-    // 현재 친구들 목록 보기
-    @GetMapping("/friends")
+    /**
+     * 친구 목록을 조회합니다.
+     * @param token
+     * @return
+     */
+    @GetMapping("/list")
     ResponseEntity<FriendListResponse> getFriends(@RequestHeader("Authorization") String token){
-
-        FriendListResponse response;
+        FriendListResponse response = new FriendListResponse();
 
         // 인증 실패
         Optional<Member> memberFind = findMember(token);
@@ -217,13 +239,43 @@ public class FriendController {
         List<FriendInfoDto> friendInfos = new ArrayList<>();
         for(FriendList friend: friendList){
             Optional<Member> member = memberService.getUserById(friend.getFriendId());
+            if (member.isEmpty()){
+                continue;
+            }
             friendInfos.add(new FriendInfoDto(member.get().getId(), member.get().getNickname(), member.get().getResolution()));
         }
 
-        response = FriendListResponse.builder()
-                .data(friendInfos)
-                .build();
+        response.setData(friendInfos);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * 받은 친구 신청 목록을 조회합니다.
+     * @param token
+     * @return
+     */
+    @GetMapping("/requested")
+    ResponseEntity<RequestedListResponse> getRequestedList(@RequestHeader("Authorization") String token){
+        RequestedListResponse response = new RequestedListResponse();
+
+        // 인증 실패
+        Optional<Member> memberFind = findMember(token);
+        if (memberFind.isEmpty()) {
+            response = RequestedListResponse.builder()
+                    .code(StatusCode.UNAUTHORIZED)
+                    .message(ResponseMessage.UNAUTHORIZED)
+                    .build();
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+
+        List<FriendRequest> requestedList = memberFind.get().getRequestedList();
+        List<FriendInfoDto> friendInfos = new ArrayList<>();
+        for(FriendRequest friendRequest:requestedList){
+            Member friend = friendRequest.getRequester();
+            friendInfos.add(new FriendInfoDto(friend.getId(), friend.getNickname(), friend.getResolution()));
+        }
+
+        response.setData(friendInfos);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
