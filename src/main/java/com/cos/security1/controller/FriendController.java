@@ -79,12 +79,15 @@ public class FriendController {
         }
         System.out.println(memberFind.get().getFriendList());
         System.out.println(friend.get().getFriendList());
+
         // 이미 친구인 경우
-        if (memberFind.get().getFriendList().contains(friend.get().getId())){
-            response = FriendRequestedResponse.builder()
-                    .message(ResponseMessage.FRIEND_INCLUDED)
-                    .build();
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        for (FriendList friendList:memberFind.get().getFriendList()) {
+            if (friendList.getFriendId().equals(friend.get().getId())) {
+                response = FriendRequestedResponse.builder()
+                        .message(ResponseMessage.FRIEND_INCLUDED)
+                        .build();
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
         }
 
         FriendRequest findRequest = friendRequestService.requestFriend(memberFind.get(), friend.get());
