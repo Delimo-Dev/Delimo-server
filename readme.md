@@ -1,4 +1,4 @@
-## [See Swagger](http://delimo-env.eba-ufdmrhpz.us-east-1.elasticbeanstalk.com/swagger-ui/index.html)
+## [See Swagger](http://delimo.ap-northeast-2.elasticbeanstalk.com/swagger-ui/index.html)
 <details>
     <summary> 회원가입 API </summary>
 
