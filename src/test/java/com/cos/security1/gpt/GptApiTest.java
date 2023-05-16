@@ -26,7 +26,8 @@ import java.util.Properties;
 
 public class GptApiTest {
     private static String API_KEY;
-    private static String MODEL = "text-davinci-003";
+    private static String MODEL_DAVINCI = "text-davinci-003";
+    private static String CHAT_MODEL_TURBO = "gpt-3.5-turbo";
     private static String END_POINT = "https://api.openai.com/v1/completions";
     private static String SYSTEM_TASK_MESSAGE = "Please classify the previous text into one of the emotions, which are happiness, fear, anger, sadness, depression, excited, impressed.";
 
@@ -60,20 +61,18 @@ public class GptApiTest {
     @Test
     @DisplayName("전체 Response Text 불러오기")
     public void getFeelingFromText() {
-        String endPoint = END_POINT;
-        String model = MODEL;
         String prompt = SAMPLE_USER_PROMPT + SYSTEM_TASK_MESSAGE;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(API_KEY);
 
-        String requestBody = createRequestBody(MODEL, prompt, MAX_TOKENS, N, STOP, TEMPERATURE);
+        String requestBody = createRequestBody(MODEL_DAVINCI, prompt, MAX_TOKENS, N, STOP, TEMPERATURE);
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
 
 
         RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.postForObject(endPoint, requestEntity, String.class);
+        String response = restTemplate.postForObject(END_POINT, requestEntity, String.class);
 
         System.out.println("response = " + response);
     }
@@ -95,7 +94,7 @@ public class GptApiTest {
         String prompt = SAMPLE_USER_PROMPT + SYSTEM_TASK_MESSAGE;
 
         JSONObject data = new JSONObject();
-        data.put("model", MODEL);
+        data.put("model", MODEL_DAVINCI);
         data.put("prompt", prompt);
         data.put("max_tokens", MAX_TOKENS);
         data.put("temperature", TEMPERATURE);
@@ -116,7 +115,7 @@ public class GptApiTest {
 
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
                 .builder()
-                .model("gpt-3.5-turbo")
+                .model(CHAT_MODEL_TURBO)
                 .temperature(0.1)
                 .messages(
                         List.of(
