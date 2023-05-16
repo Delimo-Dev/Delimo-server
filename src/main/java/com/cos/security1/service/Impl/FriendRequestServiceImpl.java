@@ -1,13 +1,8 @@
 package com.cos.security1.service.Impl;
 
-import com.cos.security1.domain.FriendList;
-import com.cos.security1.domain.FriendRequest;
-import com.cos.security1.domain.Member;
-import com.cos.security1.repository.FriendListRepository;
-import com.cos.security1.repository.FriendRequestRepository;
-import com.cos.security1.repository.MemberRepository;
-import com.cos.security1.service.FriendRequestService;
-import com.cos.security1.service.MemberService;
+import com.cos.security1.domain.*;
+import com.cos.security1.repository.*;
+import com.cos.security1.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

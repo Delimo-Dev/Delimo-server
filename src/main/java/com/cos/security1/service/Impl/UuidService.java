@@ -2,7 +2,6 @@ package com.cos.security1.service.Impl;
 
 import lombok.Getter;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

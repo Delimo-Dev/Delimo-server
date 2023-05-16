@@ -1,7 +1,6 @@
 package com.cos.security1.controller;
 
-import com.cos.security1.controller.response.auth.AuthResponse;
-import com.cos.security1.controller.response.auth.EmailVerificationResponse;
+import com.cos.security1.controller.response.auth.*;
 import com.cos.security1.controller.response.auth.SigninResponse;
 import com.cos.security1.controller.status.*;
 import com.cos.security1.domain.Member;
