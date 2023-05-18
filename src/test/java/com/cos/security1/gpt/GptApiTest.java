@@ -1,7 +1,6 @@
 package com.cos.security1.gpt;
 
-import com.theokanning.openai.completion.chat.ChatCompletionRequest;
-import com.theokanning.openai.completion.chat.ChatMessage;
+import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.service.OpenAiService;
 
 import org.json.JSONException;
@@ -20,36 +19,33 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.Duration;
-import java.util.List;
 import java.util.Properties;
 
 public class GptApiTest {
     private static String API_KEY;
-    private static String MODEL_DAVINCI = "text-davinci-003";
-    private static String CHAT_MODEL_TURBO = "gpt-3.5-turbo";
-    private static String END_POINT = "https://api.openai.com/v1/completions";
-    private static String SYSTEM_TASK_MESSAGE = "Please classify the previous text into one of the emotions, which are happiness, fear, anger, sadness, depression, excited, impressed.";
+    private final static String MODEL_DAVINCI = "text-davinci-003";
+    private final static String CHAT_MODEL_TURBO = "gpt-3.5-turbo";
+    private final static String END_POINT = "https://api.openai.com/v1/completions";
+    private final static String SYSTEM_TASK_MESSAGE = "Please classify the previous text into one of the emotions, which are happiness, fear, anger, sadness, depression, excited, impressed.";
 
-    private static String FILE_PROTOCOL = "file:/";
-    private static String ROOT_PATH_PROPERTY = "user.dir";
-    private static String PROPERTIES_DIR = "/src/config/apikey.properties";
+    private final static String FILE_PROTOCOL = "file:/";
+    private final static String ROOT_PATH_PROPERTY = "user.dir";
+    private final static String PROPERTIES_DIR = "/src/config/apikey.properties";
 
 
-    private static int MAX_TOKENS = 1000;
-    private static int N = 1;
-    private static String STOP = null;
-    private static double TEMPERATURE = 0.1;
+    private final static int MAX_TOKENS = 1000;
+    private final static int N = 1;
+    private final static String STOP = null;
+    private final static double TEMPERATURE = 0.1;
 
-    private static String SAMPLE_USER_PROMPT = "취업 준비 쉽지 않아. 할 일이 정말 많거든";
+    private final static String SAMPLE_USER_PROMPT = "취업 준비 쉽지 않아. 할 일이 정말 많거든";
 
     @BeforeEach
     void getApiKey() throws IOException {
-        StringBuilder filePath = new StringBuilder()
-                .append(FILE_PROTOCOL)
-                .append(System.getProperty(ROOT_PATH_PROPERTY))
-                .append(PROPERTIES_DIR);
-        URL propURL = new URL(filePath.toString());
+        String filePath = FILE_PROTOCOL +
+                System.getProperty(ROOT_PATH_PROPERTY) +
+                PROPERTIES_DIR;
+        URL propURL = new URL(filePath);
 
         Properties properties = new Properties();
         properties.load(propURL.openStream());
@@ -67,7 +63,7 @@ public class GptApiTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(API_KEY);
 
-        String requestBody = createRequestBody(MODEL_DAVINCI, prompt, MAX_TOKENS, N, STOP, TEMPERATURE);
+        String requestBody = createRequestBody(prompt);
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
 
 
@@ -76,9 +72,9 @@ public class GptApiTest {
 
         System.out.println("response = " + response);
     }
-    private static String createRequestBody(String model, String prompt, int maxTokens, int n, String stop, double temperature) {
+    private static String createRequestBody(String prompt) {
         return String.format("{\"model\":\"%s\",\"prompt\":\"%s\",\"max_tokens\":%d,\"n\":%d,\"stop\":%s,\"temperature\":%f}",
-                model, prompt, maxTokens, n, stop, temperature);
+                GptApiTest.MODEL_DAVINCI, prompt, GptApiTest.MAX_TOKENS, GptApiTest.N, GptApiTest.STOP, GptApiTest.TEMPERATURE);
     }
 
     @Test
@@ -109,27 +105,20 @@ public class GptApiTest {
     }
 
     @Test
-    @DisplayName("OpenAiService 사용하여 chat에 사용되는 turbo 모델 결과 응답 가져오기")
+    @DisplayName("OpenAiService 사용하여 completion response에 사용되는 davinci-model의 요청 결과 응답 가져오기")
     public void getFeelingFromDiary() {
-        OpenAiService openAiService = new OpenAiService(API_KEY, Duration.ofMinutes(1L));
+        OpenAiService openAiService = new OpenAiService(API_KEY);
 
-        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
+        CompletionRequest completionRequest = CompletionRequest
                 .builder()
-                .model(CHAT_MODEL_TURBO)
+                .prompt(SAMPLE_USER_PROMPT + SYSTEM_TASK_MESSAGE)
+                .model(MODEL_DAVINCI)
                 .temperature(0.1)
-                .messages(
-                        List.of(
-                                new ChatMessage("user", SAMPLE_USER_PROMPT),
-                                new ChatMessage("system", SYSTEM_TASK_MESSAGE)
-
-                        )
-                ).build();
+                .build();
 
         StringBuilder builder = new StringBuilder();
-        openAiService.createChatCompletion(chatCompletionRequest)
-                .getChoices().forEach(choice -> {
-                    builder.append(choice.getMessage().getContent());
-                });
+        openAiService.createCompletion(completionRequest)
+                .getChoices().forEach(choice -> builder.append(choice.getText()));
 
         String jsonResponse = builder.toString();
         System.out.println("jsonResponse = " + jsonResponse);
