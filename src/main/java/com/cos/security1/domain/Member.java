@@ -29,13 +29,13 @@ public class Member {
 
         private String resolution;
 
-        @OneToMany(mappedBy = "member")
+        @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
         private List<FriendList> friendList;
 
-        @OneToMany(mappedBy = "requested")
+        @OneToMany(mappedBy = "requested", fetch = FetchType.LAZY)
         private List<FriendRequest> requestedList;
 
-        @OneToMany(mappedBy = "requester")
+        @OneToMany(mappedBy = "requester", fetch = FetchType.LAZY)
         private List<FriendRequest> requesterList;
 
         @Builder

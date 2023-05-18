@@ -36,5 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 src/config/
+application.yml
 application-aws.yml
 application-key.yml
