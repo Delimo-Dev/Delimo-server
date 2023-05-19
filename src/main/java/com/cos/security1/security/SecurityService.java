@@ -2,7 +2,6 @@ package com.cos.security1.security;
 
 import com.cos.security1.dto.AuthenticationDto;
 import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;

@@ -2,15 +2,15 @@ package com.cos.security1.diary;
 
 import com.cos.security1.domain.Diary;
 import com.cos.security1.domain.Member;
-import com.cos.security1.dto.AuthenticationDto;
+
 import com.cos.security1.dto.DiaryDto;
 import com.cos.security1.dto.MemberDto;
 import com.cos.security1.repository.DiaryRepository;
 import com.cos.security1.repository.MemberRepository;
-import com.cos.security1.security.SecurityService;
+
 import com.cos.security1.service.DiaryService;
-import com.cos.security1.service.Impl.UuidService;
 import com.cos.security1.service.MemberService;
+import com.cos.security1.service.SentimentRecognitionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +31,8 @@ public class DiaryServiceTest {
     private DiaryService diaryService;
     @Autowired
     private DiaryRepository diaryRepository;
+    @Autowired
+    private SentimentRecognitionService sentimentService;
 
     @BeforeEach
     void beforeEach() {
@@ -43,8 +45,9 @@ public class DiaryServiceTest {
         diaryDto.setPrivacy(1); // 친구 공개
 
         memberService.insertUser(memberDto);
+        int resultSentiment = sentimentService.getSentiment(diaryDto.getContent());
         Optional<Member> member = memberService.getUserByEmail("lyb013@gmail.com");
-        diaryService.insertDiary(member.get(), diaryDto);
+        diaryService.insertDiary(member.get(), diaryDto, resultSentiment);
 
         List<Diary> diaries = diaryRepository.findAllBy();
         for(Diary diary: diaries){

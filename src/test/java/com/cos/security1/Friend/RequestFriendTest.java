@@ -59,8 +59,8 @@ public class RequestFriendTest {
 
     @Test
     void 친구_신청_보내기(){
-        Optional<Member> findMember1 = memberRepository.findById(1L);
-        Optional<Member> findMember2 = memberRepository.findById(2L);
+        Optional<Member> findMember1 = memberRepository.findByEmail("lyb2325@gmail.com");
+        Optional<Member> findMember2 = memberRepository.findByEmail("lyb000@gmail.com");
 
         System.out.println("findMember1 = " + findMember1.get());
         System.out.println("findMember2 = " + findMember2.get());

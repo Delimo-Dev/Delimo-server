@@ -14,10 +14,10 @@ public class FriendList {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "MEMBER")
     private Member member;
 
-    @Column(name = "friend_id")
+    @Column(name = "FRIEND")
     private Long friendId;
 
     @Builder

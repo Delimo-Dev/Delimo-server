@@ -13,14 +13,12 @@ import java.util.Optional;
 @Service
 public class FriendRequestServiceImpl implements FriendRequestService {
 
-    private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final FriendRequestRepository friendRequestRepository;
     private final FriendListRepository friendListRepository;
 
     @Autowired
-    public FriendRequestServiceImpl(MemberService memberService, MemberRepository memberRepository, FriendRequestRepository friendListRepository, FriendListRepository friendListRepository1) {
-        this.memberService = memberService;
+    public FriendRequestServiceImpl(MemberRepository memberRepository, FriendRequestRepository friendListRepository, FriendListRepository friendListRepository1) {
         this.memberRepository = memberRepository;
         this.friendRequestRepository = friendListRepository;
         this.friendListRepository = friendListRepository1;
@@ -43,13 +41,6 @@ public class FriendRequestServiceImpl implements FriendRequestService {
             return friendRequestRepository.save(friendRequest);
         }
         return null;
-    }
-
-    @Override
-    public List<Long> getFriendList(Member member){
-        List<Long> friendIdList = new ArrayList<>();
-        member.getFriendList().forEach((e)->friendIdList.add(e.getFriendId()));
-        return friendIdList;
     }
 
     @Override

@@ -12,7 +12,6 @@ import lombok.Setter;
 @Getter
 public class FriendRequest {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "friend_request_id")
     private Long id;
 
     @ManyToOne

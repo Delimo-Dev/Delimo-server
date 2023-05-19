@@ -9,7 +9,6 @@ import java.util.Optional;
 public interface FriendRequestService {
     Optional<Member> findByCode(String code);
     FriendRequest requestFriend(Member requester, Member requested);
-    List<Long> getFriendList(Member member);
     List<Long> getRequesterList(Member member);
     List<Long> getRequestedList(Member member);
     List<FriendRequest> getAllFriendRequest();
