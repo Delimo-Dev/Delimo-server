@@ -54,11 +54,12 @@ public class DiaryController {
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
 
-        // 오늘의 일기 가져 오기
-        Optional<Diary> todayDiary = diaryService.getTodayDiary(member.get());
         if (diaryDto.getContent().length() == 0) {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
+
+        // 오늘의 일기 가져 오기
+        Optional<Diary> todayDiary = diaryService.getTodayDiary(member.get());
 
         // 새로 작성
         if (todayDiary.isEmpty()){
@@ -80,15 +81,11 @@ public class DiaryController {
     /**
      * 오늘의 일기 조회하기
      * @param token
-     * @param diaryDto
      * @return
      */
 
     @GetMapping("/today")
-    ResponseEntity<DiaryContentResponse> getTodayDiary(
-            @RequestHeader("Authorization") String token,
-            @RequestBody DiaryDto diaryDto) {
-
+    ResponseEntity<DiaryContentResponse> getTodayDiary(@RequestHeader("Authorization") String token) {
         DiaryContentResponse response = new DiaryContentResponse();
 
         // 회원 검증
@@ -108,6 +105,7 @@ public class DiaryController {
         }
 
         response = DiaryContentResponse.builder()
+                .code(StatusCode.OK)
                 .message(ResponseMessage.DIARY_CONTENT_SUCCESSFUL)
                 .data(todayDiary.get().getContent())
                 .build();
