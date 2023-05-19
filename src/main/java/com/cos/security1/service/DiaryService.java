@@ -7,7 +7,7 @@ import com.cos.security1.dto.DiaryDto;
 import java.util.Optional;
 
 public interface DiaryService {
-    void insertDiary(Member member, DiaryDto diaryDto);
+    void insertDiary(Member member, DiaryDto diaryDto, int sentiment);
     Optional<Diary> getTodayDiary(Member member);
-    void updateDiary(Member member, DiaryDto diaryDto);
+    void updateDiary(Member member, DiaryDto diaryDto, int sentiment);
 }

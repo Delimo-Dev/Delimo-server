@@ -20,7 +20,7 @@ public class Diary {
     @JoinColumn(name = "member")
     private Member member;
 
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "LONGTEXT")
     private String content;
 
     @Column(name = "privacy_code")
@@ -30,12 +30,20 @@ public class Diary {
     @Column(name = "DIARY_CREATED_AT")
     private LocalDateTime createdDate;
 
+    @OneToOne
+    @JoinColumn(name = "diarySentiment")
+    private DiarySentiment diarySentiment;
+
     @Builder
     Diary(Member member, String content, int privacy){
         this.member = member;
         this.content = content;
         this.privacy = privacy;
         this.createdDate = LocalDateTime.now();
+    }
+
+    public void updateSentiment(DiarySentiment diarySentiment){
+        this.diarySentiment = diarySentiment;
     }
 
 }

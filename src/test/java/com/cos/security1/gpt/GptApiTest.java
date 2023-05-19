@@ -26,7 +26,9 @@ public class GptApiTest {
     private final static String MODEL_DAVINCI = "text-davinci-003";
     private final static String CHAT_MODEL_TURBO = "gpt-3.5-turbo";
     private final static String END_POINT = "https://api.openai.com/v1/completions";
-    private final static String SYSTEM_TASK_MESSAGE = "Please classify the previous text into one of the emotions, which are happiness, fear, anger, sadness, depression, excited, impressed.";
+    private final static String SYSTEM_TASK_MESSAGE = "Which of the following words best describes the previous sentence? Give the result only as the integer number."
+            + "unknown(0), happiness(1), embarrassment(2), anger(3), fear(4)"
+            + "sadness(5), hurt(6), achievement(7)";
 
     private final static String FILE_PROTOCOL = "file:/";
     private final static String ROOT_PATH_PROPERTY = "user.dir";
@@ -38,7 +40,7 @@ public class GptApiTest {
     private final static String STOP = null;
     private final static double TEMPERATURE = 0.1;
 
-    private final static String SAMPLE_USER_PROMPT = "취업 준비 쉽지 않아. 할 일이 정말 많거든";
+    private final static String SAMPLE_USER_PROMPT = "I was able to achieve my dream with my previous 10 years of work.";
 
     @BeforeEach
     void getApiKey() throws IOException {
@@ -56,7 +58,7 @@ public class GptApiTest {
     
     @Test
     @DisplayName("전체 Response Text 불러오기")
-    public void getFeelingFromText() {
+    public void getEmotionFromText() {
         String prompt = SAMPLE_USER_PROMPT + SYSTEM_TASK_MESSAGE;
 
         HttpHeaders headers = new HttpHeaders();
@@ -79,7 +81,7 @@ public class GptApiTest {
 
     @Test
     @DisplayName("Choices의 text만 결과값 가져오기")
-    public void getFeeling() throws IOException, JSONException {
+    public void getEmotion() throws IOException, JSONException {
         HttpURLConnection con = (HttpURLConnection) new URL(END_POINT).openConnection();
         String bearerToken = "Bearer " + API_KEY;
 
@@ -106,7 +108,7 @@ public class GptApiTest {
 
     @Test
     @DisplayName("OpenAiService 사용하여 completion response에 사용되는 davinci-model의 요청 결과 응답 가져오기")
-    public void getFeelingFromDiary() {
+    public void getEmotionFromDiary() {
         OpenAiService openAiService = new OpenAiService(API_KEY);
 
         CompletionRequest completionRequest = CompletionRequest
@@ -121,7 +123,7 @@ public class GptApiTest {
                 .getChoices().forEach(choice -> builder.append(choice.getText()));
 
         String jsonResponse = builder.toString();
-        System.out.println("jsonResponse = " + jsonResponse);
+        System.out.println("jsonResponse = " + jsonResponse.substring(2));
 
     }
 }
