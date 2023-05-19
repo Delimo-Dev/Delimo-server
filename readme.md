@@ -447,23 +447,34 @@ GET /diary/today
 - `200 OK`
   - 일기를 아직 작성하지 않은 경우
 
-```json
-{
-    "code": 200,
-    "message": "일기 내용이 없습니다.",
-    "data": null
-}
-```
+    ```json
+    {
+        "code": 200,
+        "message": "일기 내용이 없습니다.",
+        "data": null
+    }
+    ```
 
 - 일기 작성한 경우
 
-```json
-{
-    "code": 200,
-    "message": "오늘의 일기를 성공적으로 가져왔습니다",
-    "data": "오늘 델리모 일기장 기능 구현중입니다~ 이건 수정중"
-}
-```
+    ```json
+    {
+        "code": 200,
+        "message": "오늘의 일기를 성공적으로 가져왔습니다",
+        "data": "오늘 델리모 일기장 기능 구현중입니다~ 이건 수정중"
+    }
+    ```
+
+- `401 Unauthorized`  : 회원 인증 실패한 경우
+
+    ```json
+    {
+        "code": 401,
+        "message": "회원 인증 실패",
+        "data": null
+    }
+    ```
+
 
 # 2. 사용자는 오늘의 일기를 작성 또는 수정합니다.
 
@@ -482,18 +493,18 @@ POST /diary/today
 
 ### Request Body
 
+- privacy 설정하지 않는 경우 자동적으로 0
 - setting: 0(비공개, default), 1(친구공개), 2(전체공개)
-  - privacy 설정하지 않는 경우 자동적으로 0
 
-    ```
+    ```json
     {
-        "content":"오늘 델리모 일기장 기능 구현중입니다~",
+        "content":"즐거웠던 하루였다"
     }
     ```
 
     ```json
     {
-        "content":"오늘 델리모 일기장 기능 구현중입니다~",
+        "content":"즐거워던 하루였다",
         "privacy":1
     }
     ```
@@ -504,26 +515,28 @@ POST /diary/today
 - `201 Created`
   - POST 전송 성공
 
-    ```
+    ```json
     {
         "code": 201,
         "message": "새로운 일기가 등록되었습니다.",
         "data": {
-            "content": "오늘 델리모 일기장 기능 구현중입니다~",
-            "privacy": 0
+            "content": "너무 당황스러웠고 피곤했던 하루",
+            "privacy": 2,
+            "sentiment": 2
         }
     }
     ```
 
   - 일기 수정
 
-    ```
+    ```json
     {
         "code": 201,
         "message": "새로운 일기가 등록되었습니다.",
         "data": {
-            "content": "오늘 델리모 일기장 기능 구현중입니다~ 이건 수정중",
-            "privacy": 2
+            "content": "즐거워던 하루였다",
+            "privacy": 1,
+            "sentiment": 1
         }
     }
     ```
@@ -538,5 +551,4 @@ POST /diary/today
         "data": null
     }
     ```
-    
 </details>
