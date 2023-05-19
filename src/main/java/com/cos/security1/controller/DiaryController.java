@@ -7,8 +7,10 @@ import com.cos.security1.controller.status.StatusCode;
 import com.cos.security1.domain.Diary;
 import com.cos.security1.domain.Member;
 import com.cos.security1.dto.DiaryDto;
+import com.cos.security1.dto.DiaryResponseDto;
 import com.cos.security1.service.DiaryService;
 import com.cos.security1.service.MemberService;
+import com.cos.security1.service.SentimentRecognitionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,15 +25,17 @@ import java.util.Optional;
 public class DiaryController {
     private final DiaryService diaryService;
     private final MemberService memberService;
+    private final SentimentRecognitionService sentimentService;
 
     @Autowired
-    public DiaryController(DiaryService diaryService, MemberService memberService) {
+    public DiaryController(DiaryService diaryService, MemberService memberService, SentimentRecognitionService sentimentService) {
         this.diaryService = diaryService;
         this.memberService = memberService;
+        this.sentimentService = sentimentService;
     }
 
     /**
-     * 오늘의 일기 작성하기
+     * 오늘의 일기 작성 후 감정 분석 결과 도출
      *
      * @param token
      * @param diaryDto
@@ -58,25 +62,33 @@ public class DiaryController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
-        // 오늘의 일기 가져 오기
+        // 일기 작성 및 수정
         Optional<Diary> todayDiary = diaryService.getTodayDiary(member.get());
+        int resultSentiment = sentimentService.getSentiment(diaryDto.getContent());
 
-        // 새로 작성
-        if (todayDiary.isEmpty()){
-            diaryService.insertDiary(member.get(), diaryDto);
+        if (todayDiary.isEmpty()) {
+            diaryService.insertDiary(member.get(), diaryDto, resultSentiment);
         }
-        // 수정
         else {
-            diaryService.updateDiary(member.get(), diaryDto);
+            diaryService.updateDiary(member.get(), diaryDto, resultSentiment);
         }
+
+        DiaryResponseDto diaryData = DiaryResponseDto.builder()
+                .content(diaryDto.getContent())
+                .privacy(diaryDto.getPrivacy())
+                .sentiment(resultSentiment)
+                .build();
 
         response = DiaryCreatedResponse.builder()
                 .code(StatusCode.CREATED)
                 .message(ResponseMessage.DIARY_CREATED)
-                .data(diaryDto)
+                .data(diaryData)
                 .build();
+
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+
 
     /**
      * 오늘의 일기 조회하기
@@ -104,10 +116,16 @@ public class DiaryController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
+        DiaryResponseDto diaryData = DiaryResponseDto.builder()
+                .content(todayDiary.get().getContent())
+                .privacy(todayDiary.get().getPrivacy())
+                .sentiment(todayDiary.get().getDiarySentiment().getSentiment())
+                .build();
+
         response = DiaryContentResponse.builder()
                 .code(StatusCode.OK)
                 .message(ResponseMessage.DIARY_CONTENT_SUCCESSFUL)
-                .data(todayDiary.get().getContent())
+                .data(diaryData)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
