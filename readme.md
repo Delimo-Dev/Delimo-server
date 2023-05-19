@@ -416,3 +416,127 @@ GET /friend/requested
 ```
 </details>
 
+<details>
+  <summary>일기장 API</summary>
+
+# 1. 사용자는 오늘 작성한 일기를 조회합니다.
+
+- 오늘 작성한 일기를 조회합니다.
+- 오늘의 날짜와 작성한 일기의 날짜를 비교하여 작성한 일기가 있는지 확인합니다.
+
+### URL / Method
+
+```jsx
+GET /diary/today
+```
+
+### Request Headers
+
+- Authorization : Bearer Token
+- Content-Type : application/json; charset=utf-8
+
+### R**esponse**
+
+- `200 OK` / `201 Created`
+  - POST 전송 성공
+- `401 Unauthorized`
+  - 로그인이 필요한 경우 (JWT 토큰 만료 시)
+
+### Response Body
+
+- `200 OK`
+  - 일기를 아직 작성하지 않은 경우
+
+```json
+{
+    "code": 200,
+    "message": "일기 내용이 없습니다.",
+    "data": null
+}
+```
+
+- 일기 작성한 경우
+
+```json
+{
+    "code": 200,
+    "message": "오늘의 일기를 성공적으로 가져왔습니다",
+    "data": "오늘 델리모 일기장 기능 구현중입니다~ 이건 수정중"
+}
+```
+
+# 2. 사용자는 오늘의 일기를 작성 또는 수정합니다.
+
+- 사용자가 오늘의 일기를 새로 작성하거나, 이미 작성된 일기를 수정합니다.
+
+### URL / Method
+
+```jsx
+POST /diary/today
+```
+
+### Request Headers
+
+- Authorization : Bearer Token
+- Content-Type : application/json; charset=utf-8
+
+### Request Body
+
+- setting: 0(비공개, default), 1(친구공개), 2(전체공개)
+  - privacy 설정하지 않는 경우 자동적으로 0
+
+    ```
+    {
+        "content":"오늘 델리모 일기장 기능 구현중입니다~",
+    }
+    ```
+
+    ```json
+    {
+        "content":"오늘 델리모 일기장 기능 구현중입니다~",
+        "privacy":1
+    }
+    ```
+
+
+### R**esponse**
+
+- `201 Created`
+  - POST 전송 성공
+
+    ```
+    {
+        "code": 201,
+        "message": "새로운 일기가 등록되었습니다.",
+        "data": {
+            "content": "오늘 델리모 일기장 기능 구현중입니다~",
+            "privacy": 0
+        }
+    }
+    ```
+
+  - 일기 수정
+
+    ```
+    {
+        "code": 201,
+        "message": "새로운 일기가 등록되었습니다.",
+        "data": {
+            "content": "오늘 델리모 일기장 기능 구현중입니다~ 이건 수정중",
+            "privacy": 2
+        }
+    }
+    ```
+
+- `400 Bad Request`
+  - content 내용이 없는 경우
+
+    ```json
+    {
+        "code": 400,
+        "message": "일기 내용이 없습니다.",
+        "data": null
+    }
+    ```
+    
+</details>
