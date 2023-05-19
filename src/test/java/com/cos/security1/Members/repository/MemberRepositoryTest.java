@@ -15,11 +15,11 @@ import java.util.List;
 @Transactional
 @SpringBootTest
 public class MemberRepositoryTest {
-    @Autowired
-    MemberRepository memberRepository;
-    @Autowired
-    FriendRequestRepository friendRequestRepository;
 
+    @Autowired
+    private static MemberRepository memberRepository;
+    @Autowired
+    private static FriendRequestRepository friendRequestRepository;
     @Test
     void 두명의_회원_신규회원가입(){
         Member member = Member.builder()

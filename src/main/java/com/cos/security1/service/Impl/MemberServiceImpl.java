@@ -8,6 +8,8 @@ import com.cos.security1.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +39,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Optional<Member> verifyMember(String token) {
-        return memberRepository.findByToken(token);
+        String bearerToken = token.substring(7);
+        return memberRepository.findByToken(bearerToken);
     }
 
     @Override
@@ -66,4 +69,17 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.updateResolution(id, resolution);
     }
 
+    @Override
+    public List<Long> getFriendList(Member member){
+        List<Long> friendIdList = new ArrayList<>();
+        member.getFriendList().forEach((e)->friendIdList.add(e.getFriendId()));
+        return friendIdList;
+    }
+
+    @Override
+    public List<Long> getDiaryList(Member member) {
+        List<Long> diaryIdList = new ArrayList<>();
+        member.getDiaryList().forEach((e)->diaryIdList.add(e.getId()));
+        return diaryIdList;
+    }
 }

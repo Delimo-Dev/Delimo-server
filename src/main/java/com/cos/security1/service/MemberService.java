@@ -3,6 +3,7 @@ package com.cos.security1.service;
 import com.cos.security1.domain.Member;
 import com.cos.security1.dto.MemberDto;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,4 +15,6 @@ public interface MemberService {
     void updateResolution(Long id, String resolution);
     Optional<Member> verifyMember(String token);
     Optional<Member> getInfo(Long id);
+    List<Long> getFriendList(Member member);
+    List<Long> getDiaryList(Member member);
 }

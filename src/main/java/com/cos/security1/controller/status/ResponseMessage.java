@@ -24,6 +24,14 @@ public class ResponseMessage {
     public static final String FRIEND_REQUEST_LIST_SUCCESSFUL = "친구 신청 목록을 성공적으로 가져왔습니다.";
     public static final String FRIEND_INCLUDED = "이미 친구입니다.";
 
+    public static final String DIARY_CREATED = "새로운 일기가 등록되었습니다.";
+    public static final String DIARY_UPDATED = "일기가 수정되었습니다.";
+    public static final String DIARY_NO_CONTENT = "일기 내용이 없습니다.";
+    public static final String DIARY_CONTENT_SUCCESSFUL = "오늘의 일기를 성공적으로 가져왔습니다";
+    public static final String DIARY_UPDATE_SUCCESSFULLY = "일기 내용을 성공적으로 수정했습니다.";
+    public static final String EMOTION_RESULT_DEDUCED = "감정이 성공적으로 도출되었습니다.";
+    public static final String EMOTION_RESULT_FAILED = "감정이 정상적으로 도출되지 못했습니다.";
+
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터 베이스 에러";
     public static final String API_CALL_ERROR = "API 호출 실패";

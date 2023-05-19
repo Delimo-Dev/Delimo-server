@@ -65,20 +65,13 @@ public class MemberController {
 
         Optional<Member> memberFind = memberService.getUserByEmail(emailDto.getEmail());
         if (memberFind.isEmpty()){
-
             response = EmailVerificationResponse.builder()
                     .code(StatusCode.OK)
                     .message(ResponseMessage.EMAIL_OK)
                     .build();
-
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
-    }
-
-    Optional<Member> findMember(String token){
-        String bearerToken = token.substring(7);
-        return memberService.verifyMember(bearerToken);
     }
 
     /**
@@ -94,7 +87,7 @@ public class MemberController {
 
         AuthResponse response = new AuthResponse();
 
-        Optional<Member> member = findMember(token);
+        Optional<Member> member = memberService.verifyMember(token);
         if (member.isEmpty()){
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -119,7 +112,7 @@ public class MemberController {
     public ResponseEntity<AuthResponse> getMyInfo(@RequestHeader("Authorization") String token) {
         AuthResponse response = new AuthResponse();
 
-        Optional<Member> member = findMember(token);
+        Optional<Member> member = memberService.verifyMember(token);
         if (member.isEmpty()) {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -131,9 +124,10 @@ public class MemberController {
                 .token(member.get().getToken())
                 .nickname(member.get().getNickname())
                 .resolution(member.get().getResolution())
-                .friendList(friendRequestService.getFriendList(member.get()))
+                .friendList(memberService.getFriendList(member.get()))
                 .requestedList(friendRequestService.getRequestedList(member.get()))
                 .requesterList(friendRequestService.getRequesterList(member.get()))
+                .diaryList(memberService.getDiaryList(member.get()))
                 .build();
 
         response = AuthResponse.builder()

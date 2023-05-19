@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Member {
         @Id  @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "MEMBER_ID")
         private Long id;
 
         private String email;
@@ -37,6 +36,12 @@ public class Member {
 
         @OneToMany(mappedBy = "requester", fetch = FetchType.LAZY)
         private List<FriendRequest> requesterList;
+
+        @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+        private List<TodayResponse> responseList;
+
+        @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+        private List<Diary> diaryList;
 
         @Builder
         public Member(String email, String nickname, String password, String code, String token, String resolution) {

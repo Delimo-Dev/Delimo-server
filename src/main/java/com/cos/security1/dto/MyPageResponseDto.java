@@ -1,5 +1,6 @@
 package com.cos.security1.dto;
 
+import com.cos.security1.domain.Diary;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,9 +18,10 @@ public class MyPageResponseDto {
     List<Long> friendList;
     List<Long> requestedList;
     List<Long> requesterList;
+    List<Long> diaryList;
 
     @Builder
-    MyPageResponseDto(Long id, String email, String nickname, String token, String code, String resolution, List<Long> friendList, List<Long> requestedList, List<Long> requesterList){
+    MyPageResponseDto(Long id, String email, String nickname, String token, String code, String resolution, List<Long> friendList, List<Long> requestedList, List<Long> requesterList, List<Long> diaryList){
         this.id = id;
         this.email = email;
         this.token = token;
@@ -29,6 +31,6 @@ public class MyPageResponseDto {
         this.friendList = friendList;
         this.requestedList = requestedList;
         this.requesterList = requesterList;
-
+        this.diaryList = diaryList;
     }
 }
