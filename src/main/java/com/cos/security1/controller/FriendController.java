@@ -29,12 +29,6 @@ public class FriendController {
         this.friendRequestService = friendRequestService;
     }
 
-
-    Optional<Member> findMember(String token) {
-        String bearerToken = token.substring(7);
-        return memberService.verifyMember(bearerToken);
-    }
-
     /**
      * 친구 신청 보내기 (requester -> requested)
      *
@@ -50,7 +44,7 @@ public class FriendController {
         FriendRequestedResponse response = new FriendRequestedResponse();
 
         // 인증 실패
-        Optional<Member> memberFind = findMember(token);
+        Optional<Member> memberFind = memberService.verifyMember(token);
         if (memberFind.isEmpty()) {
             response = FriendRequestedResponse.builder()
                     .code(StatusCode.UNAUTHORIZED)
@@ -143,7 +137,7 @@ public class FriendController {
         AcceptFriendResponse response = new AcceptFriendResponse();
 
         // 인증 실패
-        Optional<Member> memberFind = findMember(token);
+        Optional<Member> memberFind = memberService.verifyMember(token);
         if (memberFind.isEmpty()) {
             response = AcceptFriendResponse.builder()
                     .code(StatusCode.UNAUTHORIZED)
@@ -185,7 +179,7 @@ public class FriendController {
         RejectFriendResponse response = new RejectFriendResponse();
 
         // 인증 실패
-        Optional<Member> memberFind = findMember(token);
+        Optional<Member> memberFind = memberService.verifyMember(token);
         if (memberFind.isEmpty()) {
             response = RejectFriendResponse.builder()
                     .code(StatusCode.UNAUTHORIZED)
@@ -224,7 +218,7 @@ public class FriendController {
         FriendListResponse response = new FriendListResponse();
 
         // 인증 실패
-        Optional<Member> memberFind = findMember(token);
+        Optional<Member> memberFind = memberService.verifyMember(token);
         if (memberFind.isEmpty()) {
             response = FriendListResponse.builder()
                     .code(StatusCode.UNAUTHORIZED)
@@ -257,7 +251,7 @@ public class FriendController {
         RequestedListResponse response = new RequestedListResponse();
 
         // 인증 실패
-        Optional<Member> memberFind = findMember(token);
+        Optional<Member> memberFind = memberService.verifyMember(token);
         if (memberFind.isEmpty()) {
             response = RequestedListResponse.builder()
                     .code(StatusCode.UNAUTHORIZED)
