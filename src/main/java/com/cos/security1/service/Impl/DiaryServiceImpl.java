@@ -79,4 +79,13 @@ public class DiaryServiceImpl implements DiaryService {
         sentimentRepository.updateSentiment(todayDiary.get().getDiarySentiment().getId(), sentiment);
         diaryRepository.updateDiary(todayDiary.get().getId(), diaryDto.getContent(), diaryDto.getPrivacy(), todayDiary.get().getDiarySentiment());
     }
+
+    /**
+     * Diary 조회수 증가시키기
+     * @param diary
+     */
+    @Override
+    public void updateVisited(Diary diary) {
+        diaryRepository.updateVisited(diary.getId());
+    }
 }

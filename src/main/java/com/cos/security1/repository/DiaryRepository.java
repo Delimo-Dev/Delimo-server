@@ -20,4 +20,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     @Query("update Diary d set d.content = :content, d.privacy = :privacy, d.diarySentiment = :sentiment where d.id = :id")
     @Modifying
     void updateDiary(@Param("id") Long id, @Param("content") String content, @Param("privacy") int privacy, @Param("sentiment") DiarySentiment diarySentiment);
+
+    @Query("update Diary d set d.visited = d.visited + 1 where d.id = :id")
+    @Modifying
+    void updateVisited(@Param("id") Long id);
 }
