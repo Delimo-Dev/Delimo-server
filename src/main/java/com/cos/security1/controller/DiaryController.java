@@ -9,6 +9,8 @@ import com.cos.security1.domain.Diary;
 import com.cos.security1.domain.Member;
 import com.cos.security1.dto.DiaryDto;
 import com.cos.security1.dto.DiaryResponseDto;
+import com.cos.security1.dto.DiarySentimentUpdateDto;
+import com.cos.security1.dto.DiarySentimentUpdateResponseDto;
 import com.cos.security1.service.DiaryService;
 import com.cos.security1.service.MemberService;
 import com.cos.security1.service.SentimentRecognitionService;
@@ -135,6 +137,26 @@ public class DiaryController {
                 .message(ResponseMessage.DIARY_CONTENT_SUCCESSFUL)
                 .data(diaryData)
                 .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * 감정 결과 수정하기
+     * @param sentimentUpdateDto
+     * @return
+     */
+    @PatchMapping("/updateSentiment")
+    ResponseEntity<SentimentUpdatedResponse> updateSentiment(@RequestBody DiarySentimentUpdateDto sentimentUpdateDto){
+        SentimentUpdatedResponse response = new SentimentUpdatedResponse();
+
+        diaryService.updateSentiment(sentimentUpdateDto);
+        DiarySentimentUpdateResponseDto updatedData = DiarySentimentUpdateResponseDto.builder()
+                .diaryId(sentimentUpdateDto.getDiaryId())
+                .sentimentId(sentimentUpdateDto.getSentimentId())
+                .updatedSentiment(sentimentUpdateDto.getNewSentiment())
+                .build();
+
+        response.setData(updatedData);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

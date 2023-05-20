@@ -31,6 +31,7 @@ public class ResponseMessage {
     public static final String DIARY_UPDATE_SUCCESSFULLY = "일기 내용을 성공적으로 수정했습니다.";
     public static final String SENTIMENT_RESULT_SUCCEED = "감정이 성공적으로 도출되었습니다.";
     public static final String SENTIMENT_RESULT_FAILED = "감정이 정상적으로 도출되지 못했습니다.";
+    public static final String SENTIMENT_UPDATED_SUCCEED = "감정이 성공적으로 변경되었습니다.";
 
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터 베이스 에러";

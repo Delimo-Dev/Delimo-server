@@ -4,6 +4,7 @@ import com.cos.security1.domain.Diary;
 import com.cos.security1.domain.DiarySentiment;
 import com.cos.security1.domain.Member;
 import com.cos.security1.dto.DiaryDto;
+import com.cos.security1.dto.DiarySentimentUpdateDto;
 import com.cos.security1.repository.DiaryRepository;
 import com.cos.security1.repository.DiarySentimentRepository;
 import com.cos.security1.service.DiaryService;
@@ -87,5 +88,14 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     public void updateVisited(Diary diary) {
         diaryRepository.updateVisited(diary.getId());
+    }
+
+    /**
+     * 일기의 감정 분석 결과 변경하기
+     * @param sentimentUpdateDto
+     */
+    @Override
+    public void updateSentiment(DiarySentimentUpdateDto sentimentUpdateDto) {
+        sentimentRepository.updateSentiment(sentimentUpdateDto.getSentimentId(), sentimentUpdateDto.getNewSentiment());
     }
 }
