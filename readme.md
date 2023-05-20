@@ -419,7 +419,7 @@ GET /friend/requested
 <details>
   <summary>일기장 API</summary>
 
-# 1. 사용자는 오늘 작성한 일기를 조회합니다.
+# 1. 사용자는 오늘 작성한 일기를 조회합니다. ✅
 
 - 오늘 작성한 일기를 조회합니다.
 - 오늘의 날짜와 작성한 일기의 날짜를 비교하여 작성한 일기가 있는지 확인합니다.
@@ -435,7 +435,7 @@ GET /diary/today
 - Authorization : Bearer Token
 - Content-Type : application/json; charset=utf-8
 
-### R**esponse**
+### Response
 
 - `200 OK` / `201 Created`
   - POST 전송 성공
@@ -488,7 +488,7 @@ GET /diary/today
     ```
 
 
-# 2. 사용자는 오늘의 일기를 작성 또는 수정합니다.
+# 2. 사용자는 오늘의 일기를 작성 또는 수정합니다. ✅
 
 - 사용자가 오늘의 일기를 새로 작성하거나, 이미 작성된 일기를 수정합니다.
 
@@ -522,7 +522,7 @@ POST /diary/today
     ```
 
 
-### R**esponse**
+### Response 
 
 - `201 Created`
   - POST 전송 성공
@@ -569,4 +569,51 @@ POST /diary/today
         "data": null
     }
     ```
+
+
+# 3. 사용자는 대표 감정을 변경할 수 있습니다. ✅
+
+- 7가지 감정 중, 자연어 처리 모델을 통해 분석된 일기에 대한 대표 감정을 바꿀 수 있습니다.
+- 감정 변경 모달 창은 처음 감정을 도출될 때에만 뜨게 됩니다. (`visitied=1` 인 경우)
+
+### URL / Method
+
+```jsx
+PATCH /diary/updateSentiment
+```
+
+### Request Headers
+
+- Authorization : Bearer Token
+- Content-Type : application/json; charset=utf-8
+
+### Request Body
+
+- 바꿀 일기 테이블의 pk id, one-to-one 관계를 맺고 있는 sentiment 테이블의 pk id와 대표 감정의 code를 전달합니다.
+
+```json
+{
+    "diaryId":1,
+    "sentimentId":1,
+    "newSentiment":7
+}
+```
+
+### Response
+
+- `200 OK`
+  - PATCH 전송 성공
+
+    ```json
+    {
+        "code": 200,
+        "message": "감정이 성공적으로 변경되었습니다.",
+        "data": {
+            "diaryId": 1,
+            "sentimentId": 1,
+            "updatedSentiment": 7
+        }
+    }
+    ```
+    
 </details>
