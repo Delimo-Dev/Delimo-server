@@ -456,12 +456,24 @@ GET /diary/today
     ```
 
 - 일기 작성한 경우
+  - `diaryId` : 해당 일기 pk값
+  - `sentimentId` : 해당 sentiment 테이블 pk값
+  - `privacy` : 공개 설정 코드
+  - `sentiment` : 감정 코드
+  - `visitied` : 방문 조회수 (1일 경우 감정 변경 모달창 구현)
 
     ```json
     {
         "code": 200,
         "message": "오늘의 일기를 성공적으로 가져왔습니다",
-        "data": "오늘 델리모 일기장 기능 구현중입니다~ 이건 수정중"
+        "data": {
+            "diaryId": 2,
+            "sentimentId": 2,
+            "content": "im happy",
+            "privacy": 2,
+            "sentiment": 1,
+            "visited": 1
+        }
     }
     ```
 
@@ -520,9 +532,12 @@ POST /diary/today
         "code": 201,
         "message": "새로운 일기가 등록되었습니다.",
         "data": {
-            "content": "너무 당황스러웠고 피곤했던 하루",
-            "privacy": 2,
-            "sentiment": 2
+            "diaryId": null,
+            "sentimentId": null,
+            "content": "오늘 스쿼트를 100개 한 하루...힘들지만 매우 뿌듯하다.",
+            "privacy": 0,
+            "sentiment": 7,
+            "visited": 0
         }
     }
     ```
@@ -534,9 +549,12 @@ POST /diary/today
         "code": 201,
         "message": "새로운 일기가 등록되었습니다.",
         "data": {
-            "content": "즐거워던 하루였다",
-            "privacy": 1,
-            "sentiment": 1
+            "diaryId": null,
+            "sentimentId": null,
+            "content": "오늘 스쿼트를 100개 한 하루...힘들지만 매우 뿌듯하다.",
+            "privacy": 0,
+            "sentiment": 7,
+            "visited": 2
         }
     }
     ```

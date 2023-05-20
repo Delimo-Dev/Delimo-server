@@ -10,4 +10,5 @@ public interface DiaryService {
     void insertDiary(Member member, DiaryDto diaryDto, int sentiment);
     Optional<Diary> getTodayDiary(Member member);
     void updateDiary(Member member, DiaryDto diaryDto, int sentiment);
+    void updateVisited(Diary diary);
 }

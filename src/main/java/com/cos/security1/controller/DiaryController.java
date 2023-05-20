@@ -2,6 +2,7 @@ package com.cos.security1.controller;
 
 import com.cos.security1.controller.response.diary.DiaryContentResponse;
 import com.cos.security1.controller.response.diary.DiaryCreatedResponse;
+import com.cos.security1.controller.response.diary.SentimentUpdatedResponse;
 import com.cos.security1.controller.status.ResponseMessage;
 import com.cos.security1.controller.status.StatusCode;
 import com.cos.security1.domain.Diary;
@@ -116,10 +117,17 @@ public class DiaryController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
+        // 조회수 증가
+        diaryService.updateVisited(todayDiary.get());
+        todayDiary.get().updateVisited();
+
         DiaryResponseDto diaryData = DiaryResponseDto.builder()
+                .diaryId(todayDiary.get().getId())
+                .sentimentId(todayDiary.get().getDiarySentiment().getId())
                 .content(todayDiary.get().getContent())
                 .privacy(todayDiary.get().getPrivacy())
                 .sentiment(todayDiary.get().getDiarySentiment().getSentiment())
+                .visited(todayDiary.get().getVisited())
                 .build();
 
         response = DiaryContentResponse.builder()

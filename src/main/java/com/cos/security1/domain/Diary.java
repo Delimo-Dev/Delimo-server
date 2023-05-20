@@ -26,6 +26,9 @@ public class Diary {
     @Column(name = "privacy_code")
     private int privacy;
 
+    @Column(name = "visited")
+    private Integer visited;
+
     @CreatedDate
     @Column(name = "DIARY_CREATED_AT")
     private LocalDateTime createdDate;
@@ -46,4 +49,12 @@ public class Diary {
         this.diarySentiment = diarySentiment;
     }
 
+    public void updateVisited(){
+        if (this.visited == null){
+            this.visited = 1;
+        }
+        else{
+            this.visited += 1;
+        }
+    }
 }
