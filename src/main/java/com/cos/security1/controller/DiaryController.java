@@ -69,17 +69,23 @@ public class DiaryController {
         Optional<Diary> todayDiary = diaryService.getTodayDiary(member.get());
         int resultSentiment = sentimentService.getSentiment(diaryDto.getContent());
 
+        Diary diaryGet = null;
+        boolean created = false;
         if (todayDiary.isEmpty()) {
-            diaryService.insertDiary(member.get(), diaryDto, resultSentiment);
+            diaryGet = diaryService.insertDiary(member.get(), diaryDto, resultSentiment);
+            created = true;
         }
         else {
             diaryService.updateDiary(member.get(), diaryDto, resultSentiment);
         }
 
-        todayDiary = diaryService.getTodayDiary(member.get());
+        if (!created){
+            diaryGet = todayDiary.get();
+        }
+
         DiaryResponseDto diaryData = DiaryResponseDto.builder()
-                .diaryId(todayDiary.get().getId())
-                .sentimentId(todayDiary.get().getDiarySentiment().getId())
+                .diaryId(diaryGet.getId())
+                .sentimentId(diaryGet.getDiarySentiment().getId())
                 .content(diaryDto.getContent())
                 .privacy(diaryDto.getPrivacy())
                 .sentiment(resultSentiment)
