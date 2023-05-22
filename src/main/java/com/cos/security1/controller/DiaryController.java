@@ -76,7 +76,10 @@ public class DiaryController {
             diaryService.updateDiary(member.get(), diaryDto, resultSentiment);
         }
 
+        todayDiary = diaryService.getTodayDiary(member.get());
         DiaryResponseDto diaryData = DiaryResponseDto.builder()
+                .diaryId(todayDiary.get().getId())
+                .sentimentId(todayDiary.get().getDiarySentiment().getId())
                 .content(diaryDto.getContent())
                 .privacy(diaryDto.getPrivacy())
                 .sentiment(resultSentiment)

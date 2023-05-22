@@ -17,7 +17,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     List<Diary> findAllBy();
     List<Diary> findAllByMember (Member member);
 
-    @Query("update Diary d set d.content = :content, d.privacy = :privacy, d.diarySentiment = :sentiment where d.id = :id")
+    @Query("update Diary d set d.content = :content, d.privacy = :privacy, d.diarySentiment = :sentiment, d.visited = 0 where d.id = :id")
     @Modifying
     void updateDiary(@Param("id") Long id, @Param("content") String content, @Param("privacy") int privacy, @Param("sentiment") DiarySentiment diarySentiment);
 
