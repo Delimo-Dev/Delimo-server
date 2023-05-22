@@ -34,7 +34,7 @@ public class DiaryServiceImpl implements DiaryService {
      * @param diaryDto
      */
     @Override
-    public void insertDiary(Member member, DiaryDto diaryDto, int sentiment) {
+    public Diary insertDiary(Member member, DiaryDto diaryDto, int sentiment) {
         Diary todayDiary = Diary.builder()
                 .content(diaryDto.getContent())
                 .member(member)
@@ -49,7 +49,7 @@ public class DiaryServiceImpl implements DiaryService {
         sentimentRepository.save(diarySentiment);
         todayDiary.updateSentiment(diarySentiment);
 
-        diaryRepository.save(todayDiary);
+        return diaryRepository.save(todayDiary);
     }
 
     /**
