@@ -32,6 +32,34 @@ public class MemberController {
     }
 
     /**
+     * 로그인
+     * @param user
+     * @return
+     */
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthenticationDto user) {
+        AuthResponse response = new AuthResponse();
+
+        // 이메일로 탐색
+        Optional<Member> memberFind = memberService.getUserByEmail(user.getEmail());
+        if (memberFind.isEmpty()) {
+            response.setMessage(ResponseMessage.LOGIN_FAILED);
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+
+        // 비밀 번호 검증
+        if (!memberService.verifyPassword(memberFind.get(), user.getPassword())) {
+            response.setMessage(ResponseMessage.LOGIN_FAILED);
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+
+        response.setCode(StatusCode.OK);
+        response.setMessage(ResponseMessage.LOGIN_SUCCESS);
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+    }
+
+    /**
      * 회원 가입
      * @param user
      * @return

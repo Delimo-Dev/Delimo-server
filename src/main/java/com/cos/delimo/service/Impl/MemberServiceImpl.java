@@ -8,7 +8,9 @@ import com.cos.delimo.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import io.jsonwebtoken.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +19,7 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private static final String SECRET_KEY = "delimo-service-secret-key-for-signin-login-authentication-service";
 
     @Autowired
     public MemberServiceImpl(MemberRepository memberRepository) {
@@ -41,6 +44,34 @@ public class MemberServiceImpl implements MemberService {
     public Optional<Member> verifyMember(String token) {
         String bearerToken = token.substring(7);
         return memberRepository.findByToken(bearerToken);
+    }
+
+    @Override
+    public boolean verifyPassword(Member member, String password){
+        return new BCryptPasswordEncoder().matches(password, member.getPassword());
+    }
+
+    @Override
+    public Optional<Member> verifyPasswordWithToken(Member member, String password) {
+        String token = member.getToken();
+
+        Claims claims;
+        try {
+            claims = Jwts.parserBuilder()
+                    .setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "만료된 토큰");
+        } catch (JwtException e) {
+            throw new JwtException("유효 하지 않은 토큰");
+        }
+
+        if (!claims.get("password").equals(password)) {
+            return Optional.empty();
+        }
+        return Optional.of(member);
     }
 
     @Override

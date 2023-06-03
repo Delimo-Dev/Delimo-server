@@ -13,6 +13,8 @@ public interface MemberService {
     Optional<Member> getUserByEmail(String email);
     void updateResolution(Long id, String resolution);
     Optional<Member> verifyMember(String token);
+    boolean verifyPassword(Member member, String password);
+    Optional<Member> verifyPasswordWithToken(Member member, String password);
     Optional<Member> getInfo(Long id);
     List<Long> getFriendList(Member member);
     List<Long> getDiaryList(Member member);

@@ -10,8 +10,8 @@ import java.util.Date;
 
 @Service
 public class SecurityService {
-    private static final String SECRET_KEY = "qwertyuiopasdfghjklqwertyuiopasdfghjklzxcvbnmzxcvbnm";
-    private static final Integer tokenValidityInSeconds = 20 * 60 * 1000;
+    private static final String SECRET_KEY = "delimo-service-secret-key-for-signin-login-authentication-service";
+    private static final Integer tokenValidityInSeconds = 20 * 60 * 1000 * 100;
 
 
     // 토큰 구현 메서드
@@ -22,7 +22,7 @@ public class SecurityService {
 
         return Jwts.builder()
                 .setSubject(auth.getEmail())
-                .setSubject(auth.getPassword())
+                .claim("password", auth.getPassword())
                 .signWith(SigninKey, signatureAlgorithm)
                 .setExpiration(new Date(System.currentTimeMillis() + tokenValidityInSeconds))
                 .compact();
@@ -36,6 +36,13 @@ public class SecurityService {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
+
+            System.out.println("claims.get(password) = " + claims.get("password"));
+            System.out.println("claims.getsubject() = " + claims.getSubject());
+            System.out.println("claims = " + claims);
+            System.out.println("claims.getExpiration() = " + claims.getExpiration());
+            System.out.println("claims.getId() = " + claims.getId());
+
         } catch (ExpiredJwtException e) {
             throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "만료된 토큰");
         } catch (JwtException e) {
