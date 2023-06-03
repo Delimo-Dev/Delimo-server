@@ -54,8 +54,11 @@ public class MemberController {
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
 
+        LoginResponseDto loginResponseDto = new LoginResponseDto(memberFind.get().getToken());
         response.setCode(StatusCode.OK);
         response.setMessage(ResponseMessage.LOGIN_SUCCESS);
+        response.setData(loginResponseDto);
+
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 
