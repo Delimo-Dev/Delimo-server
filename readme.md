@@ -1,6 +1,63 @@
 ## [See Swagger](http://delimo.ap-northeast-2.elasticbeanstalk.com/swagger-ui/index.html)
 <details>
-    <summary> 회원가입 API </summary>
+  <summary>로그인 API</summary>
+
+# 1. 사용자가 email과 password를 입력하여 로그인합니다.
+
+- 입력 데이터: email, password
+- email 또는 password가 하나라도 일치하지 않으면 로그인 실패입니다.
+- 사용자가 입력한 email을 바탕으로 회원DB에서 일치하는 회원을 찾고, `BcryptPasswordEncoder().matches()` 를 이용해 인코딩된 pw와 동일한지 여부 확인
+
+### URL / Method
+
+```jsx
+POST /users/login
+```
+
+### Request Headers
+
+- Authorization : Bearer Token
+- Content-Type : application/json; charset=utf-8
+
+### Request Body
+
+| 항목 | 타입 | 설명 | 값(예시) | 필수 |
+| --- | --- | --- | --- | --- |
+| email | string (varchar) | 사용자 email | lyb2325@gmail.com | O |
+| password | string (varchar) | 사용자 비밀번호 | 12345678*** | O |
+
+```json
+{
+    "email":"lyb2325@gmail.com",
+    "password":"12345678***",
+}
+```
+
+### Response
+
+- `200 OK`  : 로그인 성공
+- `401 Unauthorized`  : 로그인 실패
+
+```json
+{
+  "code": 200,
+  "message": "인증 성공",
+  "data": null
+}
+```
+
+```json
+{
+  "code": 401,
+  "message": "인증 실패",
+  "data": null
+}
+```
+
+</details>
+
+<details>
+    <summary> 회원 가입 API </summary>
 
 # 1. 사용자가  회원 가입합니다. ✅
 
