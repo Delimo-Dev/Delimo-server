@@ -29,7 +29,7 @@ POST /users/login
 ```json
 {
     "email":"lyb2325@gmail.com",
-    "password":"12345678***",
+    "password":"12345678***"
 }
 ```
 
