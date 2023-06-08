@@ -3,6 +3,7 @@ package com.cos.delimo.controller;
 import com.cos.delimo.controller.response.diary.DiaryContentResponse;
 import com.cos.delimo.controller.response.diary.DiaryCreatedResponse;
 import com.cos.delimo.controller.response.diary.SentimentUpdatedResponse;
+import com.cos.delimo.controller.response.global.Response;
 import com.cos.delimo.controller.status.ResponseMessage;
 import com.cos.delimo.controller.status.StatusCode;
 import com.cos.delimo.domain.Diary;
@@ -45,7 +46,7 @@ public class DiaryController {
      * @return
      */
     @PostMapping("/today")
-    ResponseEntity<DiaryCreatedResponse> newDiary(
+    ResponseEntity<Response> newDiary(
             @RequestHeader("Authorization") String token,
             @RequestBody DiaryDto diaryDto) {
 
@@ -53,17 +54,10 @@ public class DiaryController {
 
         // 회원 검증
         Optional<Member> member = memberService.verifyMember(token);
-        if (member.isEmpty()) {
-            response = DiaryCreatedResponse.builder()
-                    .code(StatusCode.UNAUTHORIZED)
-                    .message(ResponseMessage.UNAUTHORIZED)
-                    .build();
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-        }
+        if (member.isEmpty()) return response.unAuthorized();
 
-        if (diaryDto.getContent().length() == 0) {
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
+        // NO_CONTENT
+        if (diaryDto.getContent().length() == 0) return response.diaryNoContent();
 
         // 일기 작성 및 수정
         Optional<Diary> todayDiary = diaryService.getTodayDiary(member.get());
@@ -71,10 +65,12 @@ public class DiaryController {
 
         Diary diaryGet = null;
         boolean created = false;
+        // 오늘 새로운 일기 작성
         if (todayDiary.isEmpty()) {
             diaryGet = diaryService.insertDiary(member.get(), diaryDto, resultSentiment);
             created = true;
         }
+        // 기존 일기 수정
         else {
             diaryService.updateDiary(member.get(), diaryDto, resultSentiment);
         }
@@ -90,14 +86,7 @@ public class DiaryController {
                 .privacy(diaryDto.getPrivacy())
                 .sentiment(resultSentiment)
                 .build();
-
-        response = DiaryCreatedResponse.builder()
-                .code(StatusCode.CREATED)
-                .message(ResponseMessage.DIARY_CREATED)
-                .data(diaryData)
-                .build();
-
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return response.diaryCreated(diaryData);
     }
 
 
@@ -109,24 +98,16 @@ public class DiaryController {
      */
 
     @GetMapping("/today")
-    ResponseEntity<DiaryContentResponse> getTodayDiary(@RequestHeader("Authorization") String token) {
+    ResponseEntity<Response> getTodayDiary(@RequestHeader("Authorization") String token) {
         DiaryContentResponse response = new DiaryContentResponse();
 
         // 회원 검증
         Optional<Member> member = memberService.verifyMember(token);
-        if (member.isEmpty()) {
-            response = DiaryContentResponse.builder()
-                    .code(StatusCode.UNAUTHORIZED)
-                    .message(ResponseMessage.UNAUTHORIZED)
-                    .build();
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-        }
+        if (member.isEmpty()) response.unAuthorized();
 
         // 오늘의 일기 가져 오기
         Optional<Diary> todayDiary = diaryService.getTodayDiary(member.get());
-        if (todayDiary.isEmpty()){
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
+        if (todayDiary.isEmpty()) return response.diaryNotCreated();
 
         // 조회수 증가
         diaryService.updateVisited(todayDiary.get());
@@ -141,12 +122,7 @@ public class DiaryController {
                 .visited(todayDiary.get().getVisited())
                 .build();
 
-        response = DiaryContentResponse.builder()
-                .code(StatusCode.OK)
-                .message(ResponseMessage.DIARY_CONTENT_SUCCESSFUL)
-                .data(diaryData)
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+       return response.diaryGetSuccessful(diaryData);
     }
 
     /**
@@ -155,7 +131,7 @@ public class DiaryController {
      * @return
      */
     @PatchMapping("/updateSentiment")
-    ResponseEntity<SentimentUpdatedResponse> updateSentiment(@RequestBody DiarySentimentUpdateDto sentimentUpdateDto){
+    ResponseEntity<Response> updateSentiment(@RequestBody DiarySentimentUpdateDto sentimentUpdateDto){
         SentimentUpdatedResponse response = new SentimentUpdatedResponse();
 
         diaryService.updateSentiment(sentimentUpdateDto);
@@ -164,8 +140,6 @@ public class DiaryController {
                 .sentimentId(sentimentUpdateDto.getSentimentId())
                 .updatedSentiment(sentimentUpdateDto.getNewSentiment())
                 .build();
-
-        response.setData(updatedData);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return response.sentimentUpdated(updatedData);
     }
 }

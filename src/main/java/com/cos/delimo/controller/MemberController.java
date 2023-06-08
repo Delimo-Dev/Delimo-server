@@ -2,14 +2,13 @@ package com.cos.delimo.controller;
 
 import com.cos.delimo.controller.response.auth.*;
 import com.cos.delimo.controller.response.auth.SigninResponse;
-import com.cos.delimo.controller.status.*;
+import com.cos.delimo.controller.response.global.Response;
 import com.cos.delimo.domain.Member;
 import com.cos.delimo.dto.*;
 import com.cos.delimo.service.*;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
@@ -38,28 +37,22 @@ public class MemberController {
      */
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthenticationDto user) {
+    public ResponseEntity<Response> login(@RequestBody AuthenticationDto user) {
         AuthResponse response = new AuthResponse();
 
         // 이메일로 탐색
         Optional<Member> memberFind = memberService.getUserByEmail(user.getEmail());
         if (memberFind.isEmpty()) {
-            response.setMessage(ResponseMessage.LOGIN_FAILED);
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+            return response.loginFailed();
         }
 
         // 비밀 번호 검증
         if (!memberService.verifyPassword(memberFind.get(), user.getPassword())) {
-            response.setMessage(ResponseMessage.LOGIN_FAILED);
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+            return response.loginFailed();
         }
 
         LoginResponseDto loginResponseDto = new LoginResponseDto(memberFind.get().getToken());
-        response.setCode(StatusCode.OK);
-        response.setMessage(ResponseMessage.LOGIN_SUCCESS);
-        response.setData(loginResponseDto);
-
-        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        return response.loginSuccessful(loginResponseDto);
     }
 
     /**
@@ -68,23 +61,16 @@ public class MemberController {
      * @return
      */
     @PostMapping("/new")
-    public ResponseEntity<SigninResponse> signIn(@RequestBody MemberDto user){
+    public ResponseEntity<Response> signIn(@RequestBody MemberDto user){
         SigninResponse response = new SigninResponse();
 
         Optional<Member> memberFind = memberService.getUserByEmail(user.getEmail());
         if(memberFind.isEmpty()){
             Member member = memberService.insertUser(user);
             TokenDto tokenDto = new TokenDto(member.getToken());
-
-            response = SigninResponse.builder()
-                    .code(StatusCode.OK)
-                    .message(ResponseMessage.SIGNIN_SUCCESS)
-                    .data(tokenDto)
-                    .build();
-
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return response.signinSuccessful(tokenDto);
         }
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return response.emailExisted();
     }
 
     /**
@@ -93,18 +79,12 @@ public class MemberController {
      * @return
      */
     @GetMapping("/verifyEmail")
-    public ResponseEntity<EmailVerificationResponse> verifyEmail(@RequestBody EmailDto emailDto){
+    public ResponseEntity<Response> verifyEmail(@RequestBody EmailDto emailDto){
         EmailVerificationResponse response = new EmailVerificationResponse();
 
         Optional<Member> memberFind = memberService.getUserByEmail(emailDto.getEmail());
-        if (memberFind.isEmpty()){
-            response = EmailVerificationResponse.builder()
-                    .code(StatusCode.OK)
-                    .message(ResponseMessage.EMAIL_OK)
-                    .build();
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        if (memberFind.isEmpty()) return response.emailAvailable();
+        return response.emailExisted();
     }
 
     /**
@@ -114,26 +94,19 @@ public class MemberController {
      * @return
      */
     @PatchMapping("/updateResolution")
-    public ResponseEntity<AuthResponse> updateResolution(
+    public ResponseEntity<Response> updateResolution(
             @RequestHeader("Authorization") String token,
             @RequestBody ResolutionDto resolutionDto) {
 
-        AuthResponse response = new AuthResponse();
+        ResolutionUpdatedResponse response = new ResolutionUpdatedResponse();
 
         Optional<Member> member = memberService.verifyMember(token);
         if (member.isEmpty()){
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            return response.unAuthorized();
         }
 
         memberService.updateResolution(member.get().getId(), resolutionDto.getResolution());
-
-        response = AuthResponse.builder()
-                .code(StatusCode.OK)
-                .message(ResponseMessage.RESOLUTION_UPDATED)
-                .data(resolutionDto)
-                .build();
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return response.resolutionUpdated(resolutionDto);
     }
 
     /**
@@ -142,12 +115,12 @@ public class MemberController {
      * @return
      */
     @GetMapping("/myPage")
-    public ResponseEntity<AuthResponse> getMyInfo(@RequestHeader("Authorization") String token) {
-        AuthResponse response = new AuthResponse();
+    public ResponseEntity<Response> getMyInfo(@RequestHeader("Authorization") String token) {
+        MyPageResponse response = new MyPageResponse();
 
         Optional<Member> member = memberService.verifyMember(token);
         if (member.isEmpty()) {
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            return response.unAuthorized();
         }
 
         MyPageResponseDto myPageResponseDto = MyPageResponseDto.builder()
@@ -163,13 +136,7 @@ public class MemberController {
                 .diaryList(memberService.getDiaryList(member.get()))
                 .build();
 
-        response = AuthResponse.builder()
-                .code(StatusCode.OK)
-                .message(ResponseMessage.MEMBER_INFO_SUCCESS)
-                .data(myPageResponseDto)
-                .build();
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return response.getMypageSuccessful(myPageResponseDto);
     }
 
     @GetMapping

@@ -1,14 +1,12 @@
 package com.cos.delimo.controller;
 
 import com.cos.delimo.controller.response.friend.*;
-import com.cos.delimo.controller.status.ResponseMessage;
-import com.cos.delimo.controller.status.StatusCode;
+import com.cos.delimo.controller.response.global.Response;
 import com.cos.delimo.domain.*;
 import com.cos.delimo.dto.*;
 import com.cos.delimo.service.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +37,7 @@ public class FriendController {
      * @return
      */
     @PostMapping("/request")
-    ResponseEntity<FriendRequestedResponse> requestFriend(
+    ResponseEntity<Response> requestFriend(
             @RequestHeader("Authorization") String token,
             @RequestBody FriendDto friendDto) {
 
@@ -47,53 +45,25 @@ public class FriendController {
 
         // 인증 실패
         Optional<Member> memberFind = memberService.verifyMember(token);
-        if (memberFind.isEmpty()) {
-            response = FriendRequestedResponse.builder()
-                    .code(StatusCode.UNAUTHORIZED)
-                    .message(ResponseMessage.UNAUTHORIZED)
-                    .build();
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-        }
+        if (memberFind.isEmpty()) return response.unAuthorized();
 
         // 친구 찾지 못한 경우
         Optional<Member> friend = memberService.getUserById(friendDto.getFriendId());
-        if (friend.isEmpty()) {
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-        }
+        if (friend.isEmpty()) return response.friendNotFound();
 
         // 자기 자신인 경우
-        if (friend.get().getId().equals(memberFind.get().getId())) {
-            response = FriendRequestedResponse.builder()
-                            .message(ResponseMessage.REQUEST_FAILED)
-                            .build();
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-        System.out.println(memberFind.get().getFriendList());
-        System.out.println(friend.get().getFriendList());
+        if (friend.get().getId().equals(memberFind.get().getId())) return response.requestFailed();
 
         // 이미 친구인 경우
         for (FriendList friendList:memberFind.get().getFriendList()) {
-            if (friendList.getFriendId().equals(friend.get().getId())) {
-                response = FriendRequestedResponse.builder()
-                        .message(ResponseMessage.FRIEND_INCLUDED)
-                        .build();
-                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-            }
+            if (friendList.getFriendId().equals(friend.get().getId())) return response.alreadyFriend();
         }
 
-        FriendRequest findRequest = friendRequestService.requestFriend(memberFind.get(), friend.get());
         // 이미 친구로 신청한 경우
-        if (findRequest == null) {
-            response = FriendRequestedResponse.builder()
-                            .message(ResponseMessage.REQUEST_EXISTED)
-                            .build();
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-        response = FriendRequestedResponse.builder()
-                    .code(StatusCode.CREATED)
-                    .message(ResponseMessage.FRIEND_REQUESTED_SUCCESS)
-                    .build();
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        FriendRequest findRequest = friendRequestService.requestFriend(memberFind.get(), friend.get());
+        if (findRequest == null) return response.requestExisted();
+
+        return response.requestSuccessful();
     }
 
     /**
@@ -103,7 +73,7 @@ public class FriendController {
      * @return
      */
     @PostMapping("/findByCode")
-    ResponseEntity<FriendFoundResponse> findByCode(@RequestBody CodeDto code) {
+    ResponseEntity<Response> findByCode(@RequestBody CodeDto code) {
         FriendFoundResponse response = new FriendFoundResponse();
 
         Optional<Member> findMember = friendRequestService.findByCode(code.getCode());
@@ -114,58 +84,39 @@ public class FriendController {
             friendInfoDto.setNickname(findMember.get().getNickname());
             friendInfoDto.setResolution(findMember.get().getResolution());
 
-            response = FriendFoundResponse.builder()
-                    .code(StatusCode.OK)
-                    .message(ResponseMessage.FRIEND_FOUND)
-                    .data(friendInfoDto)
-                    .build();
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return response.userFound(friendInfoDto);
         }
 
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return response.userNotFound();
     }
 
 
     /**
      * 친구 신청을 승인합니다.
+     *
      * @param token
      * @param friendDto
      * @return
      */
     @PostMapping("/acceptRequest")
-    ResponseEntity<AcceptFriendResponse> acceptFriendRequest(
+    ResponseEntity<Response> acceptFriendRequest(
             @RequestHeader("Authorization") String token,
             @RequestBody FriendDto friendDto) {
         AcceptFriendResponse response = new AcceptFriendResponse();
 
         // 인증 실패
         Optional<Member> memberFind = memberService.verifyMember(token);
-        if (memberFind.isEmpty()) {
-            response = AcceptFriendResponse.builder()
-                    .code(StatusCode.UNAUTHORIZED)
-                    .message(ResponseMessage.UNAUTHORIZED)
-                    .build();
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-        }
+        if (memberFind.isEmpty()) return response.unAuthorized();
 
         // 친구 찾지 못한 경우
         Optional<Member> friend = memberService.getUserById(friendDto.getFriendId());
-        if (friend.isEmpty()) {
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-        }
+        if (friend.isEmpty()) return response.friendNotFound();
 
         List<FriendRequest> friendRequest = friendRequestService.findFriendRequest(friend.get(), memberFind.get());
-        if (friendRequest.size() == 0) {
-            response = AcceptFriendResponse.builder()
-                    .code(StatusCode.BAD_REQUEST)
-                    .message(ResponseMessage.FRIEND_REQUEST_ACCEPTED_FAILED)
-                    .build();
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
+        if (friendRequest.size() == 0) return response.requestAcceptFailed();
 
         friendRequestService.acceptFriend(friendRequest.get(0));
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
-
+        return response.requestAccepted();
     }
 
     /**
@@ -175,38 +126,24 @@ public class FriendController {
      * @return
      */
     @PostMapping("/rejectRequest")
-    ResponseEntity<RejectFriendResponse> rejectFriendRequest(
+    ResponseEntity<Response> rejectFriendRequest(
             @RequestHeader("Authorization") String token,
             @RequestBody FriendDto friendDto) {
         RejectFriendResponse response = new RejectFriendResponse();
 
         // 인증 실패
         Optional<Member> memberFind = memberService.verifyMember(token);
-        if (memberFind.isEmpty()) {
-            response = RejectFriendResponse.builder()
-                    .code(StatusCode.UNAUTHORIZED)
-                    .message(ResponseMessage.UNAUTHORIZED)
-                    .build();
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-        }
+        if (memberFind.isEmpty()) return response.unAuthorized();
 
         // 친구 찾지 못한 경우
         Optional<Member> friend = memberService.getUserById(friendDto.getFriendId());
-        if (friend.isEmpty()) {
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-        }
+        if (friend.isEmpty()) return response.friendNotFound();
 
         List<FriendRequest> friendRequest = friendRequestService.findFriendRequest(friend.get(), memberFind.get());
-        if (friendRequest.size() == 0) {
-            response = RejectFriendResponse.builder()
-                    .code(StatusCode.BAD_REQUEST)
-                    .message(ResponseMessage.FRIEND_REQUEST_ACCEPTED_FAILED)
-                    .build();
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
+        if (friendRequest.size() == 0) return response.requestRejectFailed();
 
         friendRequestService.rejectFriend(friendRequest.get(0));
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return response.rejectRequest();
 
     }
 
@@ -216,31 +153,23 @@ public class FriendController {
      * @return
      */
     @GetMapping("/list")
-    ResponseEntity<FriendListResponse> getFriends(@RequestHeader("Authorization") String token){
+    ResponseEntity<Response> getFriends(@RequestHeader("Authorization") String token){
         FriendListResponse response = new FriendListResponse();
 
         // 인증 실패
         Optional<Member> memberFind = memberService.verifyMember(token);
-        if (memberFind.isEmpty()) {
-            response = FriendListResponse.builder()
-                    .code(StatusCode.UNAUTHORIZED)
-                    .message(ResponseMessage.UNAUTHORIZED)
-                    .build();
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-        }
+        if (memberFind.isEmpty()) return response.unAuthorized();
 
         List<FriendList> friendList = memberFind.get().getFriendList();
         List<FriendInfoDto> friendInfos = new ArrayList<>();
-        for(FriendList friend: friendList){
+        for(FriendList friend: friendList) {
             Optional<Member> member = memberService.getUserById(friend.getFriendId());
-            if (member.isEmpty()){
+            if (member.isEmpty()) {
                 continue;
             }
             friendInfos.add(new FriendInfoDto(member.get().getId(), member.get().getNickname(), member.get().getResolution()));
         }
-
-        response.setData(friendInfos);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return response.friendListSuccessful(friendInfos);
     }
 
     /**
@@ -249,18 +178,12 @@ public class FriendController {
      * @return
      */
     @GetMapping("/requested")
-    ResponseEntity<RequestedListResponse> getRequestedList(@RequestHeader("Authorization") String token){
+    ResponseEntity<Response> getRequestedList(@RequestHeader("Authorization") String token){
         RequestedListResponse response = new RequestedListResponse();
 
         // 인증 실패
         Optional<Member> memberFind = memberService.verifyMember(token);
-        if (memberFind.isEmpty()) {
-            response = RequestedListResponse.builder()
-                    .code(StatusCode.UNAUTHORIZED)
-                    .message(ResponseMessage.UNAUTHORIZED)
-                    .build();
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-        }
+        if (memberFind.isEmpty()) response.unAuthorized();
 
         List<FriendRequest> requestedList = memberFind.get().getRequestedList();
         List<FriendInfoDto> friendInfos = new ArrayList<>();
@@ -268,8 +191,6 @@ public class FriendController {
             Member friend = friendRequest.getRequester();
             friendInfos.add(new FriendInfoDto(friend.getId(), friend.getNickname(), friend.getResolution()));
         }
-
-        response.setData(friendInfos);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return response.requestListSuccessful(friendInfos);
     }
 }

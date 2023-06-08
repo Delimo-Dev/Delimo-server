@@ -29,6 +29,7 @@ public class ResponseMessage {
     public static final String DIARY_CREATED = "새로운 일기가 등록되었습니다.";
     public static final String DIARY_UPDATED = "일기가 수정되었습니다.";
     public static final String DIARY_NO_CONTENT = "일기 내용이 없습니다.";
+    public static final String DIARY_NONE_TODAY = "오늘 작성된 일기가 없습니다.";
     public static final String DIARY_CONTENT_SUCCESSFUL = "오늘의 일기를 성공적으로 가져왔습니다";
     public static final String DIARY_UPDATE_SUCCESSFULLY = "일기 내용을 성공적으로 수정했습니다.";
     public static final String SENTIMENT_RESULT_SUCCEED = "감정이 성공적으로 도출되었습니다.";

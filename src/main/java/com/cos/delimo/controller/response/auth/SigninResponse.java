@@ -1,27 +1,28 @@
 package com.cos.delimo.controller.response.auth;
 
+import com.cos.delimo.controller.response.global.Response;
 import com.cos.delimo.controller.status.ResponseMessage;
 import com.cos.delimo.controller.status.StatusCode;
+import com.cos.delimo.dto.TokenDto;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 @Data
-public class SigninResponse {
-    private int code;
-    private String message;
-    private Object data;
-
-    public SigninResponse(){
-        this.code = StatusCode.BAD_REQUEST;
-        this.message = ResponseMessage.EMAIL_EXISTED;
-        this.data = null;
+@EqualsAndHashCode(callSuper=false)
+public class SigninResponse extends Response {
+    public ResponseEntity<Response> emailExisted(){
+        setCode(StatusCode.BAD_REQUEST);
+        setMessage(ResponseMessage.EMAIL_EXISTED);
+        return new ResponseEntity<>(this, HttpStatus.BAD_REQUEST);
     }
 
-    @Builder
-    public SigninResponse(int code, String message, Object data){
-        this.code = code;
-        this.message = message;
-        this.data = data;
+    public ResponseEntity<Response> signinSuccessful(TokenDto tokenDto){
+        setCode(StatusCode.OK);
+        setMessage(ResponseMessage.SIGNIN_SUCCESS);
+        setData(tokenDto);
+        return new ResponseEntity<>(this, HttpStatus.CREATED);
     }
-
 }
