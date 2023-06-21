@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+ <meta charset="UTF-8">
+ <title>Download User Info</title>
+ <style>
+     .table-container {
+         margin: 20px;
+     }
+     .export-button {
+         margin-top: 20px;
+     }
+ </style>
+</head>
+<body>
+<div class="table-container">
+ <table>
+  <thead>
+  <tr>
+   <th>id</th>
+   <th>email</th>
+   <th>nickname</th>
+   <th>resolution</th>
+   <th>diaries</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="member : ${members}">
+   <td th:text="${member.id}"></td>
+   <td th:text="${member.email}"></td>
+   <td th:text="${member.nickname}"></td>
+   <td th:text="${member.resolution}"></td>
+   <td>
+    <p th:each = "diary : ${member.diaryList}">
+     <span th:text = "${diary.content}"></span>
+     <span th:text = "${diary.diarySentiment.sentiment}"></span>
+     <span th:text = "${diary.createdDate}"></span>
+    <p/>
+   </td>
+
+  </tr>
+  </tbody>
+ </table>
+</div>
+
+<form action="/download/export" method="post">
+ <button type="submit" class="export-button">Export to Excel</button>
+</form>
+</body>
+</html>

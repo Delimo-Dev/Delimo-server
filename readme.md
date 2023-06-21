@@ -36,16 +36,17 @@ POST /users/login
 ### Response
 
 - `200 OK`  : 로그인 성공
-- `401 Unauthorized`  : 로그인 실패
 
 ```json
 {
   "code": 200,
   "message": "인증 성공",
-  "data": null
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dEBnbWFpbC5jb20iLCJwYXNzd29yZCI6InBhc3N3b3JkIiwiZXhwIjoxNjg1OTA2ODM0fQ.IWnrlUFJY2BM45a1tEWDfBRM5SoFShWypH6wOjBuFok"
+  }
 }
 ```
-
+- `401 Unauthorized`  : 로그인 실패
 ```json
 {
   "code": 401,
@@ -148,8 +149,6 @@ PATCH /users/updateResolution
     }
 }
 ```
-
-# 필요한 데이터들
 
 </details>
 
@@ -507,7 +506,7 @@ GET /diary/today
     ```json
     {
         "code": 200,
-        "message": "일기 내용이 없습니다.",
+        "message": "오늘 작성된 일기가 없습니다.",
         "data": null
     }
     ```
