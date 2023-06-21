@@ -1,5 +1,6 @@
 package com.cos.delimo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +17,7 @@ public class DiarySentiment {
     @Column(name = "SENTIMENT_CODE")
     private int sentiment;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "diary")
     private Diary diary;
