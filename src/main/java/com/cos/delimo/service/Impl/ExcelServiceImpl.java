@@ -39,7 +39,7 @@ public class ExcelServiceImpl implements ExcelService {
 
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setHeader("Content-Disposition", "attachment; filename=users.xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=members.xlsx");
 
         workbook.write(response.getOutputStream());
         workbook.close();
@@ -77,7 +77,9 @@ public class ExcelServiceImpl implements ExcelService {
         headerRow.createCell(1).setCellValue("EMAIL");
         headerRow.createCell(2).setCellValue("NICKNAME");
         headerRow.createCell(3).setCellValue("RESOLUTION");
-        headerRow.createCell(4).setCellValue("DIARIES");
+        headerRow.createCell(4).setCellValue("DIARY-CONTENT");
+        headerRow.createCell(5).setCellValue("SENTIMENT-CODE");
+        headerRow.createCell(6).setCellValue("DIARY-CREATED");
 
         for(int i=0;i<headerRow.getLastCellNum();i++){
             headerRow.getCell(i).setCellStyle(headerStyle);

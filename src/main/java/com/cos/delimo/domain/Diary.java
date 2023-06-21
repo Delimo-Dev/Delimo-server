@@ -1,6 +1,5 @@
 package com.cos.delimo.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +16,6 @@ public class Diary {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "member")
     private Member member;
