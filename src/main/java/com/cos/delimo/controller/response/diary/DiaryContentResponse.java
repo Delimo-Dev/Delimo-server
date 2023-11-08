@@ -4,7 +4,6 @@ import com.cos.delimo.controller.response.global.Response;
 import com.cos.delimo.controller.status.ResponseMessage;
 import com.cos.delimo.controller.status.StatusCode;
 import com.cos.delimo.dto.DiaryResponseDto;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.http.HttpStatus;

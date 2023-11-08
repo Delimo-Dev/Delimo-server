@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "DIARY_TBL")
@@ -36,6 +37,10 @@ public class Diary {
     @OneToOne
     @JoinColumn(name = "diarySentiment")
     private DiarySentiment diarySentiment;
+
+
+    @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY)
+    private List<DiaryComment> comments;
 
     @Builder
     Diary(Member member, String content, int privacy){

@@ -36,6 +36,10 @@ public class ResponseMessage {
     public static final String SENTIMENT_RESULT_FAILED = "감정이 정상적으로 도출되지 못했습니다.";
     public static final String SENTIMENT_UPDATED_SUCCEED = "감정이 성공적으로 변경되었습니다.";
 
+    public static final String COMMUNITY_SUCCESSFUL = "일기 목록을 커뮤니티에 성공적으로 가져왔습니다.";
+    public static final String DIARY_CONTENT_SUCCESFUL = "일기를 성공적으로 가져왔습니다.";
+    public static final String COMMENT_FAILED = "댓글 작성에 실패했습니다.";
+
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터 베이스 에러";
     public static final String API_CALL_ERROR = "API 호출 실패";

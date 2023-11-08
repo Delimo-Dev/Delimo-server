@@ -4,8 +4,6 @@ import com.cos.delimo.controller.response.diary.DiaryContentResponse;
 import com.cos.delimo.controller.response.diary.DiaryCreatedResponse;
 import com.cos.delimo.controller.response.diary.SentimentUpdatedResponse;
 import com.cos.delimo.controller.response.global.Response;
-import com.cos.delimo.controller.status.ResponseMessage;
-import com.cos.delimo.controller.status.StatusCode;
 import com.cos.delimo.domain.Diary;
 import com.cos.delimo.domain.Member;
 import com.cos.delimo.dto.DiaryDto;
@@ -16,7 +14,6 @@ import com.cos.delimo.service.DiaryService;
 import com.cos.delimo.service.MemberService;
 import com.cos.delimo.service.SentimentRecognitionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -88,7 +85,6 @@ public class DiaryController {
                 .build();
         return response.diaryCreated(diaryData);
     }
-
 
 
     /**

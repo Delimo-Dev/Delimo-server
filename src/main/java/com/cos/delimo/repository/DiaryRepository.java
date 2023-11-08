@@ -2,7 +2,6 @@ package com.cos.delimo.repository;
 
 import com.cos.delimo.domain.Diary;
 import com.cos.delimo.domain.DiarySentiment;
-import com.cos.delimo.domain.Member;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,7 +14,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     @NotNull
     Diary save(@NotNull Diary diary);
     List<Diary> findAllBy();
-    List<Diary> findAllByMember (Member member);
 
     @Query("update Diary d set d.content = :content, d.privacy = :privacy, d.diarySentiment = :sentiment, d.visited = 0 where d.id = :id")
     @Modifying

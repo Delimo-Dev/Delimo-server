@@ -70,6 +70,17 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     /**
+     * 일기 id 값으로 일기 가져오기
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public Optional<Diary> getDiaryById(Long id) {
+        return diaryRepository.findById(id);
+    }
+
+    /**
      * 기존 일기 수정하기
      * @param member
      * @param diaryDto
