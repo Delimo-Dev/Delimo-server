@@ -60,16 +60,16 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public DiaryComment insertComment(Long diaryId, Member member, String content) {
+    public void insertComment(Long diaryId, Long memberId, String content) {
 
         Optional<Diary> diary = diaryRepository.findById(diaryId);
         DiaryComment comment = DiaryComment.builder()
                 .diary(diary.get())
-                .member(member)
+                .memberId(memberId)
                 .content(content)
                 .build();
 
-        return commentRepository.save(comment);
+        commentRepository.save(comment);
     }
 
 }

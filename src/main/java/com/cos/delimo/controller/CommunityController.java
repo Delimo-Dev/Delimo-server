@@ -67,7 +67,7 @@ public class CommunityController {
     /**
      * 새로운 댓글 작성
      */
-    @PostMapping("/comment/{diaryId}")
+    @PostMapping("/diaries/{diaryId}/comment")
     ResponseEntity<Response> postComment(
             @RequestHeader("Authorization") String token,
             @PathVariable("diaryId") Long diaryId,
@@ -79,7 +79,7 @@ public class CommunityController {
         Optional<Member> memberFind = memberService.verifyMember(token);
         if (memberFind.isEmpty()) return newCommentResponse.commentFailed();
 
-        communityService.insertComment(diaryId, memberFind.get(), diaryCommentDto.getContent());
+        communityService.insertComment(diaryId, memberFind.get().getId(), diaryCommentDto.getContent());
 
         return newCommentResponse.commentSuccessful();
     }

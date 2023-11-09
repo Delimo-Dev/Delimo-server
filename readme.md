@@ -673,3 +673,109 @@ PATCH /diary/updateSentiment
     ```
     
 </details>
+
+<details>
+  <summary>커뮤니티 게시판 API</summary>
+
+# 1. 커뮤니티 게시판을 봅니다. (오늘의 일기)
+
+- 사용자는 다른 사용자들의 전체 공개된 일기 게시물들을 볼 수 있습니다.
+
+### URL / Method
+
+```jsx
+GET /community/diaries
+```
+
+### Request Headers
+
+- Authorization : Bearer Token
+- Content-Type : application/json; charset=utf-8
+
+### Response Body
+
+- privacy 설정 값이 전체 공개 (setting값:2) 인 게시물들의 리스트를 보여줍니다.
+- comment 리스트도 함께 나옴
+
+```json
+{
+    "code": 200,
+    "message": "일기 목록을 커뮤니티에 성공적으로 가져왔습니다.",
+    "data": [
+        {
+            "diaryId": 1,
+            "memberId": 1,
+            "code": "d3601200",
+            "nickname": "yebin",
+            "content": "졸업까지 얼마 안남아서 너무 슬퍼",
+            "createdDate": "2023-11-09T12:29:45.599339",
+            "comments": [
+                {
+                    "id": 1,
+                    "content": "나는 얼른 졸업하고 싶어~",
+                    "createdDate": "2023-11-09T12:47:39.244858",
+                    "memberId": 2
+                },
+                {
+                    "id": 2,
+                    "content": "나는 얼른 졸업하고 싶어~",
+                    "createdDate": "2023-11-09T12:48:11.24125",
+                    "memberId": 2
+                },
+                {
+                    "id": 3,
+                    "content": "나도 이제 대학 생활이 끝난 다니 슬퍼~",
+                    "createdDate": "2023-11-09T13:00:32.353228",
+                    "memberId": 3
+                }
+            ]
+        }
+    ]
+}
+```
+
+### R**esponse**
+
+- `200 OK` / `201 Created`
+  - GET성공
+- `401 Unauthorized`
+  - 로그인이 필요한 경우 (JWT 토큰 만료 시)
+
+
+# 2. 사용자는 게시글에 댓글을 달 수 있습니다.
+
+- 사용자는 관심이 가는 게시글에 댓글을 달아 반응을 할 수 있습니다.
+
+### URL / Method
+
+```jsx
+POST /community/diaries/{diary_id}/comment
+```
+
+### Request Headers
+
+- Authorization : Bearer Token
+- Content-Type : application/json; charset=utf-8\
+
+### Request Body
+
+- content : 댓글 내용
+
+```json
+{
+    "content":"나도 이제 대학 생활이 끝난 다니 슬퍼~"
+}
+```
+
+### **Response**
+
+- `200 OK` / `201 Created`
+  - POST 전송 성공
+- `401 Unauthorized`
+  - 로그인이 필요한 경우 (JWT 토큰 만료 시)
+- `404 Not Found`
+  - 원본 게시글이 비공개로 전환되었거나, 삭제되는 등 어떠한 이유로 원본 게시글을 더 이상 볼 수 없는 경우
+- `400 Bad Request`
+  - 서버 오류로 댓글을 다는데 실패한 경우
+
+</details>

@@ -15,7 +15,7 @@ public class NewCommentResponse extends Response{
 
     public ResponseEntity<Response> commentSuccessful() {
         setCode(StatusCode.OK);
-        setMessage(ResponseMessage.COMMUNITY_SUCCESSFUL);
+        setMessage(ResponseMessage.DIARY_COMMENT_SUCCEESSFUL);
         return new ResponseEntity<>(this, HttpStatus.OK);
     }
 

@@ -82,7 +82,7 @@ public class DiaryController {
                 .content(diaryDto.getContent())
                 .privacy(diaryDto.getPrivacy())
                 .sentiment(resultSentiment)
-                .build();
+            .build();
         return response.diaryCreated(diaryData);
     }
 

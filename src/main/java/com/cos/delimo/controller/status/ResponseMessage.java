@@ -38,6 +38,8 @@ public class ResponseMessage {
 
     public static final String COMMUNITY_SUCCESSFUL = "일기 목록을 커뮤니티에 성공적으로 가져왔습니다.";
     public static final String DIARY_CONTENT_SUCCESFUL = "일기를 성공적으로 가져왔습니다.";
+
+    public static final String DIARY_COMMENT_SUCCEESSFUL = "성공적으로 일기에 댓글 작성을 하였습니다.";
     public static final String COMMENT_FAILED = "댓글 작성에 실패했습니다.";
 
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
