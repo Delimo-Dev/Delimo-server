@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
-import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
@@ -20,10 +19,6 @@ import org.springframework.context.annotation.Configuration;
                 ),
                 termsOfService = "${tos.uri}",
                 description = "${api.description}"
-        ),
-        servers = @Server(
-                url = "${api.server.url}",
-                description = "Production"
         )
 )
 public class OpenApiSecurityConfiguration {
