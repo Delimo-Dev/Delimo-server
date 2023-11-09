@@ -10,7 +10,7 @@ import java.util.TimeZone;
 
 @EnableScheduling
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
-public class Security1Application {
+public class DelimoApplication {
 
 	@PostConstruct
 	void started() {
@@ -18,7 +18,7 @@ public class Security1Application {
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(Security1Application.class, args);
+		SpringApplication.run(DelimoApplication.class, args);
 	}
 
 }
