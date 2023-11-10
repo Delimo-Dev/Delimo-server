@@ -1,4 +1,4 @@
-package com.cos.delimo.service.Impl;
+package com.cos.delimo.service.impl;
 
 import lombok.Getter;
 import org.springframework.stereotype.Component;
@@ -19,8 +19,11 @@ public class UuidService {
     }
 
     private String createShortUuid() {
-        UUID uuid = UUID.randomUUID();
+        UUID uuid;
+
+        uuid = UUID.randomUUID();
         String uuidString = uuid.toString();
+
         byte[] uuidStringBytes = uuidString.getBytes(StandardCharsets.UTF_8);
         byte[] hashBytes;
 

@@ -1,4 +1,4 @@
-package com.cos.delimo.repository.Impl;
+package com.cos.delimo.repository.impl;
 
 import com.cos.delimo.domain.FriendRequest;
 import com.cos.delimo.repository.FriendRequestRepository;

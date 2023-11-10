@@ -6,7 +6,7 @@ import com.cos.delimo.dto.AuthenticationDto;
 import com.cos.delimo.repository.FriendRequestRepository;
 import com.cos.delimo.repository.MemberRepository;
 import com.cos.delimo.security.SecurityService;
-import com.cos.delimo.service.Impl.UuidService;
+import com.cos.delimo.service.impl.UuidService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

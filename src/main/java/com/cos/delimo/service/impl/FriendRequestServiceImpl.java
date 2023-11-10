@@ -1,4 +1,4 @@
-package com.cos.delimo.service.Impl;
+package com.cos.delimo.service.impl;
 
 import com.cos.delimo.domain.*;
 import com.cos.delimo.repository.*;
@@ -37,7 +37,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
                 .build();
 
         List<FriendRequest> findRequests = friendRequestRepository.findRequest(requester, requested);
-        if(findRequests.size() == 0) {
+        if(findRequests.isEmpty()) {
             return friendRequestRepository.save(friendRequest);
         }
         return null;

@@ -1,4 +1,4 @@
-package com.cos.delimo.service.Impl;
+package com.cos.delimo.service.impl;
 
 import com.cos.delimo.domain.DiarySentiment;
 import com.cos.delimo.repository.DiarySentimentRepository;
@@ -17,19 +17,13 @@ public class SentimentRecognitionServiceImpl implements SentimentRecognitionServ
     private final DiarySentimentRepository diarySentimentRepository;
 
     private static String API_KEY;
-    private final static String MODEL_DAVINCI = "text-davinci-003";
-    private final static String SYSTEM_TASK_MESSAGE = "Which of the following words best describes the previous sentence? : unknown(0), happiness(1), embarrassment(2), anger(3), fear(4), sadness(5), hurt(6), achievement(7). Give the result as the integer value";
-    private final static String FILE_PROTOCOL = "file:/";
-    private final static String ROOT_PATH_PROPERTY = "user.dir";
-    private final static String PROPERTIES_DIR = "/src/config/apikey.properties";
-
-
-    private final static int MAX_TOKENS = 1000;
-    private final static String STOP = null;
-    private final static double TEMPERATURE = 0.1;
-
-    private final static String SAMPLE_USER_PROMPT = "취업 준비 쉽지 않아. 할 일이 정말 많거든";
-
+    private static final String MODEL_DAVINCI = "text-davinci-003";
+    private static final String SYSTEM_TASK_MESSAGE = "Which of the following words best describes the previous sentence? : unknown(0), happiness(1), embarrassment(2), anger(3), fear(4), sadness(5), hurt(6), achievement(7). Give the result as the integer value";
+    private static final String FILE_PROTOCOL = "file:/";
+    private static final String ROOT_PATH_PROPERTY = "user.dir";
+    private static final String PROPERTIES_DIR = "/src/config/apikey.properties";
+    
+    private static final double TEMPERATURE = 0.1;
 
     private static void getApiKey() throws IOException {
         String filePath = FILE_PROTOCOL +

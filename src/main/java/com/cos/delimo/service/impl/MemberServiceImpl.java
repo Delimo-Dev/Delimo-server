@@ -1,4 +1,4 @@
-package com.cos.delimo.service.Impl;
+package com.cos.delimo.service.impl;
 
 import com.cos.delimo.domain.Member;
 import com.cos.delimo.dto.*;
@@ -103,14 +103,14 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<Long> getFriendList(Member member){
         List<Long> friendIdList = new ArrayList<>();
-        member.getFriendList().forEach((e)->friendIdList.add(e.getFriendId()));
+        member.getFriendList().forEach(e -> friendIdList.add(e.getFriendId()));
         return friendIdList;
     }
 
     @Override
     public List<Long> getDiaryList(Member member) {
         List<Long> diaryIdList = new ArrayList<>();
-        member.getDiaryList().forEach((e)->diaryIdList.add(e.getId()));
+        member.getDiaryList().forEach(e -> diaryIdList.add(e.getId()));
         return diaryIdList;
     }
 }

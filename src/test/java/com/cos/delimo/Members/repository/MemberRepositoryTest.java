@@ -3,7 +3,7 @@ package com.cos.delimo.Members.repository;
 import com.cos.delimo.domain.Member;
 import com.cos.delimo.repository.FriendRequestRepository;
 import com.cos.delimo.repository.MemberRepository;
-import com.cos.delimo.service.Impl.UuidService;
+import com.cos.delimo.service.impl.UuidService;
 import jakarta.transaction.Transactional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,9 +12,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @Transactional
 @SpringBootTest
-public class MemberRepositoryTest {
+class MemberRepositoryTest {
 
     @Autowired
     private static MemberRepository memberRepository;
@@ -44,6 +46,6 @@ public class MemberRepositoryTest {
             System.out.println("member = " + memberFind);
         }
 
-        Assertions.assertThat(members.size()).isEqualTo(2);
+        assertThat(members.size()).isEqualTo(2);
     }
 }

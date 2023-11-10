@@ -1,4 +1,4 @@
-package com.cos.delimo.service.Impl;
+package com.cos.delimo.service.impl;
 
 import com.cos.delimo.domain.Diary;
 import com.cos.delimo.domain.DiaryComment;
