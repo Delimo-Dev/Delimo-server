@@ -1,5 +1,6 @@
 package com.cos.delimo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class Diary {
 
     @ManyToOne
     @JoinColumn(name = "member")
+    @JsonIgnore
     private Member member;
 
     @Column(name = "content", columnDefinition = "LONGTEXT")
@@ -40,6 +42,7 @@ public class Diary {
 
 
     @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<DiaryComment> comments;
 
     @Builder

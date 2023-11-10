@@ -1,6 +1,5 @@
 package com.cos.delimo.dto;
 
-import com.cos.delimo.domain.DiaryComment;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,11 +16,11 @@ public class CommunityDiaryDto {
 
     private String content;
     private LocalDateTime createdDate;
-    private List<DiaryComment> comments;
+    private List<DiaryCommentDto> comments;
 
 
     @Builder
-    CommunityDiaryDto(Long diaryId, Long memberId, String code, String nickname, String content, LocalDateTime createdDate, List<DiaryComment> comments) {
+    CommunityDiaryDto(Long diaryId, Long memberId, String code, String nickname, String content, LocalDateTime createdDate, List<DiaryCommentDto> comments) {
         this.diaryId = diaryId;
         this.memberId = memberId;
         this.code = code;
