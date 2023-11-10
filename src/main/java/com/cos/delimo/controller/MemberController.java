@@ -144,8 +144,4 @@ public class MemberController {
         return memberService.getAllUsers();
     }
 
-    @GetMapping("/{email}")
-    public Optional<Member> getUserByEmail(@PathVariable String email){
-        return memberService.getUserByEmail(email);
-    }
 }

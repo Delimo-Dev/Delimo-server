@@ -53,7 +53,7 @@ public class CommunityController {
      * 특정 일기 가져오기 (diary Id로)
      */
     @GetMapping("/diaries/{diaryId}")
-    ResponseEntity<Response> getDiary(@RequestParam("diaryId") Long diaryId) {
+    ResponseEntity<Response> getDiary(@PathVariable("diaryId") Long diaryId) {
         Response response = new Response();
 
         Optional<Diary> diary = diaryService.getDiaryById(diaryId);

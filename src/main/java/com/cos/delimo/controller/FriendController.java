@@ -72,11 +72,13 @@ public class FriendController {
      * @param code
      * @return
      */
-    @PostMapping("/findByCode")
-    ResponseEntity<Response> findByCode(@RequestBody CodeDto code) {
+    @PostMapping("/findByCode/{code}")
+    ResponseEntity<Response> findByCode(
+            @PathVariable("code") String code
+    ) {
         FriendFoundResponse response = new FriendFoundResponse();
 
-        Optional<Member> findMember = friendRequestService.findByCode(code.getCode());
+        Optional<Member> findMember = friendRequestService.findByCode(code);
         if (findMember.isPresent()) {
             FriendInfoDto friendInfoDto = new FriendInfoDto();
 
