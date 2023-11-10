@@ -1,4 +1,4 @@
-## [See Swagger](http://delimo.ap-northeast-2.elasticbeanstalk.com/swagger-ui/index.html)
+## [See Swagger](http://delimo-server.ap-northeast-2.elasticbeanstalk.com/swagger-ui/index.html)
 <details>
   <summary>로그인 API</summary>
 
