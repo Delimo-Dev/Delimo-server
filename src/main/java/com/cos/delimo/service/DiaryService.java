@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface DiaryService {
     Diary insertDiary(Member member, DiaryDto diaryDto, int sentiment);
     Optional<Diary> getTodayDiary(Member member);
-    Optional<Diary> getDiaryById(Long id);
+    Optional<DiaryResponseDto> getDiaryById(Long id);
     void updateDiary(Member member, DiaryDto diaryDto, int sentiment);
     void updateVisited(Diary diary);
     void updateSentiment(DiarySentimentUpdateDto sentimentUpdateDto);

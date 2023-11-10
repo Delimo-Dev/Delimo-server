@@ -5,10 +5,10 @@ import com.cos.delimo.controller.response.community.NewCommentResponse;
 import com.cos.delimo.controller.response.global.Response;
 import com.cos.delimo.controller.status.ResponseMessage;
 import com.cos.delimo.controller.status.StatusCode;
-import com.cos.delimo.domain.Diary;
 import com.cos.delimo.domain.Member;
 import com.cos.delimo.dto.CommunityDiaryDto;
 import com.cos.delimo.dto.DiaryCommentDto;
+import com.cos.delimo.dto.DiaryResponseDto;
 import com.cos.delimo.service.CommunityService;
 import com.cos.delimo.service.DiaryService;
 import com.cos.delimo.service.MemberService;
@@ -56,7 +56,7 @@ public class CommunityController {
     ResponseEntity<Response> getDiary(@PathVariable("diaryId") Long diaryId) {
         Response response = new Response();
 
-        Optional<Diary> diary = diaryService.getDiaryById(diaryId);
+        Optional<DiaryResponseDto> diary = diaryService.getDiaryById(diaryId);
 
         response.setMessage(ResponseMessage.DIARY_CONTENT_SUCCESSFUL);
         response.setCode(StatusCode.OK);

@@ -78,8 +78,23 @@ public class DiaryServiceImpl implements DiaryService {
      * @return
      */
     @Override
-    public Optional<Diary> getDiaryById(Long id) {
-        return diaryRepository.findById(id);
+    public Optional<DiaryResponseDto> getDiaryById(Long id) {
+        Optional<Diary> diary = diaryRepository.findById(id);
+
+        if (diary.isPresent()) {
+            DiaryResponseDto diaryResponseDto = DiaryResponseDto.builder()
+                    .diaryId(diary.get().getId())
+                    .createdDate(diary.get().getCreatedDate())
+                    .content(diary.get().getContent())
+                    .privacy(diary.get().getVisited())
+                    .sentiment(diary.get().getDiarySentiment().getSentiment())
+                    .visited(diary.get().getVisited())
+                    .build();
+
+            return Optional.of(diaryResponseDto);
+        }
+
+        return Optional.empty();
     }
 
     /**
