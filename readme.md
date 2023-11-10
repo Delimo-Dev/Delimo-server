@@ -220,23 +220,19 @@ GET /users/myPage
 
 # 2. code로 친구를 검색합니다.
 
-- 친구 코드로 친구를 검색합니다.
+- 친구 코드로 친구를 검색합니다. (path variable)
 
 ### URL / Method
 - React Native에서 Get 메서드에 대해 Request Body 확인하지 않으므로 Post로 변경
-- Params로 변경 가능성 존재
+- 친구 코드는 노출되어도 큰 문제 없는 정보라 판단되어 PathVariable로 변경
+
 ```jsx
-POST /friend/findByCode
+POST /friend/findByCode/{code}
 ```
 
-### Request Body
-
-- Content-Type : application/json; charset=utf-8
-
-```json
-{
-    "code":"ba45fb96f"
-}
+### Path Variable
+```jsx
+POST /friend/findByCode/1234567
 ```
 
 ### Response Body
