@@ -2,6 +2,7 @@ package com.cos.delimo.controller;
 
 import com.cos.delimo.controller.response.diary.DiaryContentResponse;
 import com.cos.delimo.controller.response.diary.DiaryCreatedResponse;
+import com.cos.delimo.controller.response.diary.DiaryListResponse;
 import com.cos.delimo.controller.response.diary.SentimentUpdatedResponse;
 import com.cos.delimo.controller.response.global.Response;
 import com.cos.delimo.domain.Diary;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -137,5 +139,22 @@ public class DiaryController {
                 .updatedSentiment(sentimentUpdateDto.getNewSentiment())
                 .build();
         return response.sentimentUpdated(updatedData);
+    }
+
+    /**
+     * 내가 작성한 일기 목록 보기
+     */
+    @GetMapping("/list")
+    ResponseEntity<Response> diaryLists(
+            @RequestHeader("Authorization") String token
+    ) {
+        DiaryListResponse response = new DiaryListResponse();
+        // 회원 검증
+        Optional<Member> member = memberService.verifyMember(token);
+        if (member.isEmpty()) response.unAuthorized();
+
+        List<DiaryResponseDto> diaries = diaryService.getAllDiaries(member.get());
+        return response.diaryListSuccessful(diaries);
+
     }
 }

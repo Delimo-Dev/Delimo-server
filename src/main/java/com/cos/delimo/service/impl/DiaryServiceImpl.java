@@ -4,6 +4,7 @@ import com.cos.delimo.domain.Diary;
 import com.cos.delimo.domain.DiarySentiment;
 import com.cos.delimo.domain.Member;
 import com.cos.delimo.dto.DiaryDto;
+import com.cos.delimo.dto.DiaryResponseDto;
 import com.cos.delimo.dto.DiarySentimentUpdateDto;
 import com.cos.delimo.repository.DiaryRepository;
 import com.cos.delimo.repository.DiarySentimentRepository;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -108,5 +110,31 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     public void updateSentiment(DiarySentimentUpdateDto sentimentUpdateDto) {
         sentimentRepository.updateSentiment(sentimentUpdateDto.getSentimentId(), sentimentUpdateDto.getNewSentiment());
+    }
+
+    /**
+     * 회원의 모든 일기 조회하기
+     * @param member
+     * @return
+     */
+    @Override
+    public List<DiaryResponseDto> getAllDiaries(Member member) {
+        List<DiaryResponseDto> diaryResponseDtos = new ArrayList<>();
+
+        List<Diary> diaries = member.getDiaryList();
+        for (Diary diary: diaries) {
+            DiaryResponseDto diaryResponseDto = DiaryResponseDto.builder()
+                    .diaryId(diary.getId())
+                    .visited(diary.getVisited())
+                    .sentimentId(diary.getDiarySentiment().getId())
+                    .privacy(diary.getPrivacy())
+                    .content(diary.getContent())
+                    .createdDate(diary.getCreatedDate())
+                    .build();
+
+            diaryResponseDtos.add(diaryResponseDto);
+        }
+
+        return diaryResponseDtos;
     }
 }

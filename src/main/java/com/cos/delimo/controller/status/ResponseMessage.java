@@ -36,6 +36,8 @@ public class ResponseMessage {
     public static final String SENTIMENT_RESULT_FAILED = "감정이 정상적으로 도출되지 못했습니다.";
     public static final String SENTIMENT_UPDATED_SUCCEED = "감정이 성공적으로 변경되었습니다.";
 
+    public static final String DIARY_LIST_SUCCESSFUL = "내 일기 목록을 성공적으로 가져왔습니다.";
+
     public static final String COMMUNITY_SUCCESSFUL = "일기 목록을 커뮤니티에 성공적으로 가져왔습니다.";
     public static final String DIARY_CONTENT_SUCCESFUL = "일기를 성공적으로 가져왔습니다.";
 

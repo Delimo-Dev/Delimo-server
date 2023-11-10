@@ -671,7 +671,51 @@ PATCH /diary/updateSentiment
         }
     }
     ```
-    
+
+# 4. 사용자는 자신이 작성한 전체 일기 목록 조회합니다.
+
+- 사용자는 그동안 작성한 전체 일기들을 조회합니다.
+
+### URL / Method
+
+```jsx
+GET /diary/list
+```
+
+### Request Headers
+
+- Authorization : Bearer Token
+- Content-Type : application/json; charset=utf-8
+
+### R**esponse**
+
+- `200 OK` / `201 Created`
+  - POST 전송 성공
+- `401 Unauthorized`
+  - 로그인이 필요한 경우 (JWT 토큰 만료 시)
+
+### Response Body
+
+- `200 OK`
+
+    ```json
+    {
+        "code": 200,
+        "message": "내 일기 목록을 성공적으로 가져왔습니다.",
+        "data": [
+            {
+                "diaryId": 2,
+                "sentimentId": 2,
+                "content": "드디 주말이다 휴",
+                "privacy": 0,
+                "sentiment": 0,
+                "visited": 2,
+                "createdDate": "2023-11-11T01:53:05.970923"
+            }
+        ]
+    }
+    ```
+  
 </details>
 
 <details>
@@ -697,6 +741,11 @@ GET /community/diaries
 - privacy 설정 값이 전체 공개 (setting값:2) 인 게시물들의 리스트를 보여줍니다.
 - comment 리스트도 함께 나옴
 
+### Response Body
+
+- privacy 설정 값이 전체 공개 (setting값:2) 인 게시물들의 리스트를 보여줍니다.
+- comment 리스트도 함께 나옴
+
 ```json
 {
     "code": 200,
@@ -707,26 +756,26 @@ GET /community/diaries
             "memberId": 1,
             "code": "d3601200",
             "nickname": "yebin",
-            "content": "졸업까지 얼마 안남아서 너무 슬퍼",
+            "content": "졸업까지 얼마 안남아서 너무 슬퍼퍼",
             "createdDate": "2023-11-09T12:29:45.599339",
             "comments": [
                 {
-                    "id": 1,
+                    "memberId": null,
+                    "nickname": "익명",
                     "content": "나는 얼른 졸업하고 싶어~",
-                    "createdDate": "2023-11-09T12:47:39.244858",
-                    "memberId": 2
+                    "createdDate": "2023-11-09T12:47:39.244858"
                 },
                 {
-                    "id": 2,
-                    "content": "나는 얼른 졸업하고 싶어~",
-                    "createdDate": "2023-11-09T12:48:11.24125",
-                    "memberId": 2
-                },
-                {
-                    "id": 3,
+                    "memberId": 1,
+                    "nickname": "yebin",
                     "content": "나도 이제 대학 생활이 끝난 다니 슬퍼~",
-                    "createdDate": "2023-11-09T13:00:32.353228",
-                    "memberId": 3
+                    "createdDate": "2023-11-09T13:00:32.353228"
+                },
+                {
+                    "memberId": 1,
+                    "nickname": "yebin",
+                    "content": "나도 슬퍼",
+                    "createdDate": "2023-11-10T21:37:38.18776"
                 }
             ]
         }
