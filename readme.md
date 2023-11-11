@@ -156,7 +156,7 @@ PATCH /users/updateResolution
 <details>
     <summary> 마이 페이지, 친구 API </summary>
 
-# 1. 마이 페이지에서 친구 목록을 확인합니다. ✅
+# 1. 마이 페이지에서 나의 정보를 확인합니다. ✅
 
 ### URL / Method
 
@@ -172,7 +172,9 @@ GET /users/myPage
 ### Response Body
 
 - 오늘의 구절(phrase)은 매일 바뀌므로, 오늘의 date에 해당하는 phrase를 응답으로 받습니다.
-- 내 고유 id, unique_id는 친구 추가 시 필요한 id입니다.
+- 내 정보들: email, code, resolution, friendList, requestedList 
+- 내 고유 code는 친구 추가 시 필요한 정보입니다.
+
 
 ```json
 {
