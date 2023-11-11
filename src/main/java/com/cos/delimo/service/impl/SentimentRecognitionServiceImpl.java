@@ -18,14 +18,18 @@ public class SentimentRecognitionServiceImpl implements SentimentRecognitionServ
 
     private static String API_KEY;
     private static final String MODEL_DAVINCI = "text-davinci-003";
-    private static final String SYSTEM_TASK_MESSAGE = "Which of the following words best describes the previous sentence? : unknown(0), happiness(1), embarrassment(2), anger(3), fear(4), sadness(5), hurt(6), achievement(7). Give the result as the integer value";
+    private static final String SYSTEM_TASK_MESSAGE = null;
     private static final String FILE_PROTOCOL = "file:/";
     private static final String ROOT_PATH_PROPERTY = "user.dir";
     private static final String PROPERTIES_DIR = "/src/config/apikey.properties";
-    
+
     private static final double TEMPERATURE = 0.1;
 
-    private static void getApiKey() throws IOException {
+    /**
+     * properties 파일에 저장한 GPT API KEY와 SYSTEM TASK MESSAGE (prompt) 를 가져옵니다.
+     * @throws IOException
+     */
+    private static void getApiKeyAndTaskMessage() throws IOException {
         String filePath = FILE_PROTOCOL +
                 System.getProperty(ROOT_PATH_PROPERTY) +
                 PROPERTIES_DIR;
@@ -35,11 +39,12 @@ public class SentimentRecognitionServiceImpl implements SentimentRecognitionServ
         properties.load(propURL.openStream());
 
         API_KEY = properties.getProperty("gptKey");
+        SYSTEM_TASK_MESSAGE = properties.getProperty("prompt");
     }
 
     @Autowired
     public SentimentRecognitionServiceImpl(DiarySentimentRepository diarySentimentRepository) throws IOException {
-        getApiKey();
+        getApiKeyAndTaskMessage();
         this.diarySentimentRepository = diarySentimentRepository;
     }
 
