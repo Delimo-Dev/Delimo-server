@@ -11,8 +11,9 @@ import java.util.Date;
 @Service
 public class SecurityService {
     private static final String SECRET_KEY = "delimo-service-secret-key-for-signin-login-authentication-service";
-    private static final Integer tokenValidityInSeconds = 20 * 60 * 1000 * 100;
-
+    private static final Integer tokenValidityInSeconds =  20 * 60 * 100000;
+    private static final String TOKEN_EXPIRED = "만료된 토큰입니다.";
+    private static final String TOKEN_UNVALID = "유효하지 않은 토큰입니다.";
 
     // 토큰 구현 메서드
     public String createToken(AuthenticationDto auth) {
@@ -37,16 +38,10 @@ public class SecurityService {
                     .parseClaimsJws(token)
                     .getBody();
 
-            System.out.println("claims.get(password) = " + claims.get("password"));
-            System.out.println("claims.getsubject() = " + claims.getSubject());
-            System.out.println("claims = " + claims);
-            System.out.println("claims.getExpiration() = " + claims.getExpiration());
-            System.out.println("claims.getId() = " + claims.getId());
-
         } catch (ExpiredJwtException e) {
-            throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "만료된 토큰");
+            throw new ExpiredJwtException(e.getHeader(), e.getClaims(), TOKEN_EXPIRED);
         } catch (JwtException e) {
-            throw new JwtException("유효 하지 않은 토큰");
+            throw new JwtException(TOKEN_UNVALID);
         }
         return claims.getSubject();
 
