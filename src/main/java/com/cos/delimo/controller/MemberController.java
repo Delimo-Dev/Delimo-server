@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -137,11 +136,6 @@ public class MemberController {
                 .build();
 
         return response.getMypageSuccessful(myPageResponseDto);
-    }
-
-    @GetMapping
-    public List<Member> getAllUsers(){
-        return memberService.getAllUsers();
     }
 
 }
